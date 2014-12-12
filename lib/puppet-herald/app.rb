@@ -10,11 +10,15 @@ module PuppetHerald
   class App < Sinatra::Base
     register Sinatra::Namespace
     register Sinatra::ActiveRecordExtension
-    configure :production do
+    configure [:production, :development] do
       enable :logging
       PuppetHerald::Database.setup self
     end
-    set :environment, :production
+    if PuppetHerald::is_in_dev?
+      set :environment, :development
+    else
+      set :environment, :production
+    end
 
     def self.bug ex
       file = Tempfile.new(['puppet-herald-bug', '.log'])
@@ -37,6 +41,12 @@ module PuppetHerald
       @bug = PuppetHerald::App.bug(env['sinatra.error'])
       erb :err500
     end
+
+    get %r{/app\.min\.(js\.map|js)} do |ext|
+      content_type 'application/javascript'
+      ugly = PuppetHerald::Javascript::uglify '/app.min.js.map'
+      ugly[ext]
+    end
     
     get '/' do
       redirect "/app.html", 301
@@ -47,7 +57,11 @@ module PuppetHerald
     end
 
     get '/app.html' do
-      @files = PuppetHerald::Javascript::files
+      if PuppetHerald::is_in_prod?
+        @files = ['/app.min.js']
+      else
+        @files = PuppetHerald::Javascript::files
+      end
       erb :app
     end
 
