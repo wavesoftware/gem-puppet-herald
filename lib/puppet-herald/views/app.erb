@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" ng-app="herald" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="herald" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="herald" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="herald" class="no-js"> <!--<![endif]-->
+  <head ng-controller="AppController as app">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ app.page | capitalize }} | Herald - a Puppet report processor</title>
+
+    <meta name="description" content="Herald - a Puppet report processor">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script> -->
+  </head>
+  <body>
+
+    <section class="container-fluid">
+      
+      <h2><img src="/img/shield97.svg" />Herald <small>a Puppet report processor</small></h2>
+      
+      <ol class="breadcrumb">
+        <li><a ng-href="/nodes">Home</a></li>
+      </ol>
+
+      <div ng-view></div>
+      
+      <small>Herald app: v<span app-version></span></small>
+    </section>
+
+
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-route.js"></script>
+    <script src="//cdn.jsdelivr.net/momentjs/2.5.1/moment.min.js"></script>
+    <script src="//cdn.jsdelivr.net/angular.moment/0.6.2/angular-moment.js"></script>
+
+    <!-- Automatic incudes of project files -->
+    <% @files.each do |file| %>
+    <script src="<%= file %>"></script><% end %>
+  </body>
+</html>

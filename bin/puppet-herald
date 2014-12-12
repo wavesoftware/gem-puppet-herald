@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+
+$0 = 'puppet-herald'
+
+begin
+  require 'puppet-herald/cli'
+rescue LoadError
+  require 'rubygems'
+  require 'puppet-herald/cli'
+end
+
+# Process command line options and run Puppet Herald
+PuppetHerald::CLI.parse_options

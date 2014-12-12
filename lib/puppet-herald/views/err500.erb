@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Error 500 | Herald - a Puppet report processor</title>
+    <meta name="description" content="Herald - a Puppet report processor">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  </head>
+  <body>
+
+    <section class="container-fluid">
+      <h2><img src="/img/shield97.svg" />Herald <small>a Puppet report processor</small></h2>
+      
+      <div class="jumbotron">
+        <h2 class="text-danger glyphicon glyphicon-fire">Internal Server Error (500)</h2>
+        <p>Something realy unpredictable just happend...</p>
+        <div class="well well-lg"><samp><%= @bug[:message] %></samp></div>
+        <p><small><strong>Pro Tip!</strong> Please report this bug by passing contents of bug file: <code><%= @bug[:bugfile] %></code></small></p>
+        <p><a class="btn btn-danger btn-lg" href="<%= @bug[:homepage] %>" role="button">Report a bug</a></p>
+      </div>
+    </section>
+  </body>
+</html>
