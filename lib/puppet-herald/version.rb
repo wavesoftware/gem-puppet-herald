@@ -15,6 +15,6 @@ module PuppetHerald
   PACKAGE     = 'puppet-herald'
   SUMMARY     = 'a Puppet report processor'
   DESCRIPTION = "Provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports."
-  HOMEPAGE    = 'https://github.com/wavesoftware/puppet-herald'
+  HOMEPAGE    = 'https://github.com/wavesoftware/gem-puppet-herald'
 
 end

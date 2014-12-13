@@ -1,28 +1,73 @@
-== README
+puppet-herald gem
+========
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Overview
+--------
 
-Things you may want to cover:
+Herald is a puppet report processor. He provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports.
 
-* Ruby version
+Puppet module
+-----
 
-* System dependencies
+There is/will be a puppet module that handle installation and configuration of Herald and prerequisites. Check that out: https://github.com/wavesoftware/puppet-herald
 
-* Configuration
+Prerequisites
+-----
 
-* Database creation
+ * `libpq-dev`
 
-* Database initialization
+On Ubuntu/Debian system install them with:
 
-* How to run the test suite
+```shell
+sudo apt-get install libpq-dev
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+Installation
+-----
 
-* Deployment instructions
+Install Herald and all dependencies from http://rubygems.org:
+```shell
+sudo gem install puppet-herald
+```
 
-* ...
+Configuration
+-----
 
+If you like to use PostgreSQL database to hold reports, you will need to configure it. By default, Herald will use a sqlite file that he tries to create in your home directory. Check out `puppet-herald --help` for description.
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+###Create a database
+
+Just create a database for Herald (this is just a sample):
+```sql
+CREATE ROLE pherald LOGIN PASSWORD '<YOUR PASSWORD>' NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+CREATE DATABASE "pherald" WITH OWNER = pherald
+  ENCODING = 'UTF8'
+  TABLESPACE = pg_default;
+```
+
+Usage
+-----
+
+```shell
+$ puppet-herald --help
+```
+
+Example of running a server with using sqlite and binding to other host and port:
+
+```shell
+puppet-herald --dbconn sqlite:///var/lib/puppet/reports/pherald.db --bind master.cluster.vm --port 8081
+```
+
+###Contributing
+
+Contributions are welcome!
+
+To contribute, follow the standard [git flow](http://danielkummer.github.io/git-flow-cheatsheet/) of:
+
+1. Fork it
+1. Create your feature branch (`git checkout -b feature/my-new-feature`)
+1. Commit your changes (`git commit -am 'Add some feature'`)
+1. Push to the branch (`git push origin feature/my-new-feature`)
+1. Create new Pull Request
+
+Even if you can't contribute code, if you have an idea for an improvement please open an [issue](https://github.com/wavesoftware/gem-puppet-herald/issues).

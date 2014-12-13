@@ -1,0 +1,38 @@
+.herald-table-report > tbody > tr {
+  font-family: monospace;
+  background-color: #2C001E;
+  white-space: pre;
+  color: #777;
+}
+
+.table-hover.herald-table-report > tbody > tr:hover {
+  background-color: #360025;
+}
+
+.table-condensed.herald-table-report > tbody > tr > td {
+  padding: 1px 10px;
+}
+
+.herald-table-report > tbody > tr > td {
+  border-color: #2C001E;
+}
+
+.herald-table-report > tbody > tr > td.herald-log-notice {
+  color: #eeeeec;
+}
+
+.herald-table-report > tbody > tr > td.herald-log-debug {
+  color: #079898;
+}
+
+.herald-table-report > tbody > tr > td.herald-log-err {
+  color: #ef2929;
+}
+
+.herald-table-report > tbody > tr > td.herald-log-warning {
+  color: #e9be00;
+}
+
+.herald-table-report > tbody > tr > td.herald-log-info {
+  color: #4f920f;
+}

@@ -6,7 +6,7 @@
   <head ng-controller="AppController as app">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ app.page | capitalize }} | Herald - a Puppet report processor</title>
+    <title>Herald - a Puppet report processor</title>
 
     <meta name="description" content="Herald - a Puppet report processor">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,16 +14,13 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap<%= @minified %>.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme<%= @minified %>.css">
+    <link rel="stylesheet" href="css/herald.css">
   </head>
   <body>
 
     <section class="container-fluid">
       
       <h2><img src="/img/shield97.svg" />Herald <small>a Puppet report processor</small></h2>
-      
-      <ol class="breadcrumb">
-        <li><a ng-href="/nodes">Home</a></li>
-      </ol>
 
       <div ng-view></div>
       
