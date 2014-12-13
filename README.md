@@ -1,6 +1,8 @@
 puppet-herald gem
 ========
 
+[![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald)
+
 Overview
 --------
 

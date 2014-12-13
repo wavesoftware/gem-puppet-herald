@@ -21,7 +21,6 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 1.9.2'
 
   # Runtime
-  gem.add_runtime_dependency 'rake',                 '~> 10.4'
   gem.add_runtime_dependency 'sinatra',              '~> 1.4'
   gem.add_runtime_dependency 'sinatra-contrib',      '~> 1.4'
   gem.add_runtime_dependency 'sinatra-activerecord', '~> 2.0'
@@ -31,17 +30,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'pg',                   '~> 0.17'
   gem.add_runtime_dependency 'puma',                 '~> 2.10'
 
-  # Test
-  gem.add_development_dependency 'rspec',            '~> 3.1'
-  gem.add_development_dependency 'rspec-its',        '~> 1.1'
-  gem.add_development_dependency 'coveralls',        '~> 0.7'
-  gem.add_development_dependency 'simplecov',        '~> 0.9'
-
-  # Development
-  gem.add_development_dependency 'inch',             '~> 0.5'
-  gem.add_development_dependency 'travis',           '~> 1.6'
-  gem.add_development_dependency 'pry-byebug',       '~> 2.0'   if RUBY_VERSION >= '2.0.0'
-  gem.add_development_dependency 'pry-debugger',     '~> 0.2'   if RUBY_VERSION < '2.0.0'
+  # Development and test dependencies specified in Gemfile
   
 end
 
