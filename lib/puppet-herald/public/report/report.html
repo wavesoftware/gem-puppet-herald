@@ -1,0 +1,24 @@
+<div class="panel panel-primary" ng-controller="ReportController as ctrl">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Report for {{ ctrl.report.host }} <span class="badge">{{ ctrl.report.log_entries.length }}</span></div>
+
+  <!-- Table -->
+  <table class="table table-condensed table-hover herald-table-report">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Line</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td></td>
+        <td># puppet {{ ctrl.report.kind }} [...]</td>
+      </tr>
+      <tr ng-repeat="entry in ctrl.report.log_entries | orderBy:'time'">
+        <td>{{ $index + 1 }}</td>
+        <td class="herald-log-{{ entry.level }}">{{ entry.level | capitalize }}: {{ entry.source }}: {{ entry.message }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

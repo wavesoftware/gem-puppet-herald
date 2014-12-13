@@ -1,6 +1,6 @@
-<div class="panel panel-primary" ng-controller="ReportsController as reports">
+<div class="panel panel-primary" ng-controller="NodeController as ctrl">
   <!-- Default panel contents -->
-  <div class="panel-heading">Reports for {{ reports.node.name }} <span class="badge">{{ reports.node.reports.length }}</span></div>
+  <div class="panel-heading">Reports for {{ ctrl.node.name }} <span class="badge">{{ ctrl.node.reports.length }}</span></div>
 
   <!-- Table -->
   <table class="table table-striped table-hover">
@@ -14,10 +14,14 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="report in reports.node.reports | orderBy:'-time'">
+      <tr ng-repeat="report in ctrl.node.reports | orderBy:'-time'">
         <td>{{ $index + 1 }}</td>
         <td>{{ report.configuration_version }}</td>
-        <td ng-init="status = report.status" status-label></td>
+        <td><ng-status-button 
+          status="report.status" 
+          id="report.id"
+          route="'/report/:id'"
+          ></ng-status-button></td>
         <td>{{ report.environment }}</td>
         <td am-time-ago="report.time"></td>
       </tr>

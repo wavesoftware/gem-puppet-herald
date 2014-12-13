@@ -2,5 +2,6 @@
   type="button" class="
     btn btn-xs btn-{{ status | colorizeStatus }}
     glyphicon glyphicon-{{ status | iconizeStatus }}
-    " 
+    "
+  ng-click="navigate()"
   aria-hidden="true"> {{ status | uppercase }}</button>
