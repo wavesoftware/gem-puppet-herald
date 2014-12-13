@@ -9,7 +9,7 @@ module PuppetHerald
     return version.strip
   end
 
-  VERSION     = version_prep '0.1.0.pre'
+  VERSION     = version_prep '0.1.0'
   LICENSE     = 'Apache 2.0'
   NAME        = 'Puppet Herald'
   PACKAGE     = 'puppet-herald'
