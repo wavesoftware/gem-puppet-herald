@@ -20,42 +20,28 @@ Gem::Specification.new do |gem|
   # Dependencies
   gem.required_ruby_version = '>= 1.9.2'
 
-  prydebugger = if RUBY_VERSION >= "2.0.0" then 'pry-byebug' else 'pry-debugger' end
-  dependencies = {
-    :runtime     => [
-      'rake',
-      'sinatra',
-      'sinatra-contrib',
-      'sinatra-activerecord',
-      'micro-optparse',
-      'uglifier',
-      'sqlite3',
-      'pg',
-      'puma'
-    ],
-    :test        => [
-      'rspec',
-      'rspec-its',
-      'coveralls',
-      'simplecov'
-    ],
-    :developmant => [
-      'inch',
-      'travis',
-      'travis-lint',
-      prydebugger
-    ]
-  }
+  # Runtime
+  gem.add_runtime_dependency 'rake',                 '~> 10.4'
+  gem.add_runtime_dependency 'sinatra',              '~> 1.4'
+  gem.add_runtime_dependency 'sinatra-contrib',      '~> 1.4'
+  gem.add_runtime_dependency 'sinatra-activerecord', '~> 2.0'
+  gem.add_runtime_dependency 'micro-optparse',       '~> 1.2'
+  gem.add_runtime_dependency 'uglifier',             '~> 2.6'
+  gem.add_runtime_dependency 'sqlite3',              '~> 1.3'
+  gem.add_runtime_dependency 'pg',                   '~> 0.17'
+  gem.add_runtime_dependency 'puma',                 '~> 2.10'
 
-  dependencies[:runtime].each do |spec|
-    gem.add_runtime_dependency spec
-  end
-  dependencies[:test].each do |spec|
-    gem.add_development_dependency spec
-  end
-  dependencies[:developmant].each do |spec|
-    gem.add_development_dependency spec
-  end
+  # Test
+  gem.add_development_dependency 'rspec',            '~> 3.1'
+  gem.add_development_dependency 'rspec-its',        '~> 1.1'
+  gem.add_development_dependency 'coveralls',        '~> 0.7'
+  gem.add_development_dependency 'simplecov',        '~> 0.9'
+
+  # Development
+  gem.add_development_dependency 'inch',             '~> 0.5'
+  gem.add_development_dependency 'travis',           '~> 1.6'
+  gem.add_development_dependency 'pry-byebug',       '~> 2.0'   if RUBY_VERSION >= '2.0.0'
+  gem.add_development_dependency 'pry-debugger',     '~> 0.2'   if RUBY_VERSION < '2.0.0'
   
 end
 

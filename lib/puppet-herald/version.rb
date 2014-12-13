@@ -4,7 +4,7 @@ module PuppetHerald
     version = desired
     if desired.match(/[^0-9\.]+/)
       git = `git describe --tags --dirty --always`
-      version += "-" + git[1..-1]
+      version += "." + git.gsub('-', '.')
     end
     return version.strip
   end
