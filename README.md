@@ -6,6 +6,10 @@ Overview
 
 Herald is a puppet report processor. He provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports.
 
+![A reports list](https://raw.githubusercontent.com/wavesoftware/gem-puppet-herald/gh-pages/images/reports.png)
+
+![A logs of single report](https://raw.githubusercontent.com/wavesoftware/gem-puppet-herald/gh-pages/images/logs.png)
+
 Puppet module
 -----
 
