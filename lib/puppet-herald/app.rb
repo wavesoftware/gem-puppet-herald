@@ -1,5 +1,5 @@
 require 'sinatra/base'
-require "sinatra/namespace"
+require 'sinatra/namespace'
 require 'sinatra/activerecord'
 require 'puppet-herald'
 require 'puppet-herald/javascript'
@@ -10,36 +10,27 @@ module PuppetHerald
   class App < Sinatra::Base
     register Sinatra::Namespace
     register Sinatra::ActiveRecordExtension
-    configure [:production, :development] do
-      enable :logging
-      PuppetHerald::Database.setup self
-    end
+
+    set :database, PuppetHerald::Database.spec unless PuppetHerald::Database.spec.nil?
     if PuppetHerald::is_in_dev?
       set :environment, :development
     else
       set :environment, :production
     end
 
-    def self.bug ex
-      file = Tempfile.new(['puppet-herald-bug', '.log'])
-      filepath = file.path
-      file.close
-      file.unlink
-      message = "v#{PuppetHerald::VERSION}-#{ex.class.to_s}: #{ex.message}"
-      contents = message + "\n\n" + ex.backtrace.join("\n") + "\n"
-      File.write(filepath, contents)
-      bugo = {
-        :message  => message,
-        :homepage => PuppetHerald::HOMEPAGE,
-        :bugfile  => filepath,
-        :help     => "Please report this bug to #{PuppetHerald::HOMEPAGE} by passing contents of bug file: #{filepath}"
-      }
-      return bugo
+    def self.run! options = {}, &block
+      ActiveRecord::Base.establish_connection(PuppetHerald::Database.spec)
+      ActiveRecord::Migrator.up "db/migrate"
+      super options, *block
     end
 
     error do
-      @bug = PuppetHerald::App.bug(env['sinatra.error'])
-      erb :err500
+      @bug = PuppetHerald::bug(env['sinatra.error'])
+      if response.content_type == 'application/json'
+        @bug.to_json
+      else
+        erb :err500
+      end
     end
 
     get %r{/app\.min\.(js\.map|js)} do |ext|

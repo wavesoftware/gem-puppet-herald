@@ -26,9 +26,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sinatra-activerecord', '~> 2.0'
   gem.add_runtime_dependency 'micro-optparse',       '~> 1.2'
   gem.add_runtime_dependency 'uglifier',             '~> 2.6'
-  gem.add_runtime_dependency 'sqlite3',              '~> 1.3'
-  gem.add_runtime_dependency 'pg',                   '~> 0.17'
-  gem.add_runtime_dependency 'puma',                 '~> 2.10'
 
   # Development and test dependencies specified in Gemfile
   

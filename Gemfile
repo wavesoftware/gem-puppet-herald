@@ -9,6 +9,7 @@ group :test do
   gem 'rspec-its',        '~> 1.1'
   gem 'coveralls',        '~> 0.7'
   gem 'simplecov',        '~> 0.9'
+  gem 'sqlite3',          '~> 1.3'
 
 end
 
@@ -21,5 +22,9 @@ group :development do
 
 end
 
+local_gemfile = File.join(File.dirname(__FILE__), "Gemfile.local")
+if File.exists?(local_gemfile)
+  eval_gemfile local_gemfile
+end
 
 # vim:ft=ruby

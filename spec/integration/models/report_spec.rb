@@ -2,7 +2,7 @@ require 'model_helper'
 require 'puppet-herald/models/report'
 require 'puppet-herald/models/log-entry'
 
-describe Report, ".create_from_yaml" do
+describe Report, ".create_from_yaml", :rollback => true do
   context 'for valid YAML' do
     let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
     it 'that is really not empty' do
@@ -37,7 +37,7 @@ describe Report, ".create_from_yaml" do
   end
 end
 
-describe Report, '.get_with_log_entries' do
+describe Report, '.get_with_log_entries', :rollback => true do
   let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
   let(:id)   { Report.create_from_yaml(yaml).id }
 

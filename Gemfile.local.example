@@ -1,0 +1,7 @@
+
+gem 'pg'
+gem 'puma'
+# gem 'thin'
+
+
+# vim:ft=ruby

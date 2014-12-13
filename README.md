@@ -1,7 +1,14 @@
 puppet-herald gem
 ========
 
-[![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald)
+##### Status Info
+[![GitHub Issues](https://img.shields.io/github/issues/wavesoftware/gem-puppet-herald.svg)](https://github.com/wavesoftware/gem-puppet-herald/issues) [![Gem](http://img.shields.io/gem/v/puppet-herald.svg)](https://rubygems.org/gems/puppet-herald) [![GitHub Release](https://img.shields.io/github/release/wavesoftware/gem-puppet-herald.svg)](https://github.com/wavesoftware/gem-puppet-herald/releases) [![Apache 2.0 License](http://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://raw.githubusercontent.com/wavesoftware/gem-puppet-herald/develop/LICENSE)
+
+##### Master (stable) branch
+[![Build Status](https://img.shields.io/travis/wavesoftware/gem-puppet-herald/master.svg)](https://travis-ci.org/wavesoftware/gem-puppet-herald) [![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald) [![Coverage Status](https://img.shields.io/coveralls/wavesoftware/gem-puppet-herald/master.svg)](https://coveralls.io/r/wavesoftware/gem-puppet-herald?branch=master) [![Code Climate](https://codeclimate.com/github/wavesoftware/gem-puppet-herald/badges/gpa.svg?branch=master)](https://codeclimate.com/github/wavesoftware/gem-puppet-herald) [![Inline docs](http://inch-ci.org/github/wavesoftware/gem-puppet-herald.svg?branch=master)](http://inch-ci.org/github/wavesoftware/gem-puppet-herald)
+
+##### Development branch
+[![Build Status](https://img.shields.io/travis/wavesoftware/gem-puppet-herald/develop.svg)](https://travis-ci.org/wavesoftware/gem-puppet-herald) [![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald) [![Coverage Status](https://img.shields.io/coveralls/wavesoftware/gem-puppet-herald/develop.svg)](https://coveralls.io/r/wavesoftware/gem-puppet-herald?branch=develop) [![Code Climate](https://codeclimate.com/github/wavesoftware/gem-puppet-herald/badges/gpa.svg?branch=develop)](https://codeclimate.com/github/wavesoftware/gem-puppet-herald) [![Inline docs](http://inch-ci.org/github/wavesoftware/gem-puppet-herald.svg?branch=develop)](http://inch-ci.org/github/wavesoftware/gem-puppet-herald) 
 
 Overview
 --------

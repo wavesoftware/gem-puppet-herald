@@ -1,4 +1,5 @@
 require 'micro-optparse'
+require 'logger'
 require 'puppet-herald'
 require 'puppet-herald/version'
 require 'puppet-herald/database'
@@ -6,7 +7,37 @@ require 'puppet-herald/database'
 module PuppetHerald
   class CLI
 
-    def self.parse_options
+    @@logger = Logger.new STDOUT
+    @@errlogger = Logger.new STDERR
+    @@retcode = 0
+
+    def self.retcode= val
+      @@retcode = val if @@retcode == 0
+    end
+
+    def self.logger
+      @@logger
+    end
+
+    def self.errlogger
+      @@errlogger
+    end
+
+    def self.run! argv=ARGV
+      @@retcode = 0
+      begin
+        options = parse_options argv
+        require 'puppet-herald/app'
+        PuppetHerald::App.run! options
+      rescue Exception => ex
+        bug = PuppetHerald.bug(ex)
+        errlogger.fatal "Unexpected error occured, mayby a bug?\n\n#{bug[:message]}\n\n#{bug[:help]}"
+        self.retcode = 1
+      end
+      Kernel::exit @@retcode
+    end
+
+    def self.parse_options argv
       usage = ""
       banner = <<-eos
 #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} - #{PuppetHerald::SUMMARY}
@@ -30,24 +61,20 @@ CAUTION! For security reasons, don't pass password in connection string, use --p
         p.option :dbconn, "Connection string to database, see info above", :default => defaultdb
         p.option :passfile, "If using postgresql, this file will be read for password to database", :default => defaultdbpass
       end
-      options = parser.process!
+      options = parser.process!(argv)
 
-      puts "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION}..."
+      logger.info "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} in #{PuppetHerald::environment}..."
       PuppetHerald::Database.dbconn   = options[:dbconn]
       PuppetHerald::Database.passfile = options[:passfile]
       begin
-        PuppetHerald::Database.validate! :echo => true
+        PuppetHerald::Database.spec :echo => true
       rescue Exception => ex
-        STDERR.puts "FATAL ERROR - Database configuration is invalid!\n\n#{ex.message}"
-        exit 2
+        errlogger.fatal "Database configuration is invalid!\n\n#{ex.message}"
+        self.retcode = 2
+        raise ex
       end
-      begin
-        PuppetHerald::App.run! options
-      rescue Exception => ex
-        bug = PuppetHerald::App.bug(ex)
-        STDERR.puts "FATAL ERROR - Unexpected error occured, mayby a bug?\n\n#{bug[:message]}\n\n#{bug[:help]}"
-        exit 1
-      end
+
+      return options
     end
   end
 end

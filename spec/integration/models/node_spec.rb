@@ -3,7 +3,7 @@ require 'puppet-herald/models/report'
 require 'puppet-herald/models/log-entry'
 require 'puppet-herald/models/node'
 
-describe Node, '.get_with_reports' do
+describe Node, '.get_with_reports', :rollback => true do
   let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
   let(:id)   { Report.create_from_yaml(yaml).node_id }
 
