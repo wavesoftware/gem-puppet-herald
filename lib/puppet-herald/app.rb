@@ -58,8 +58,10 @@ module PuppetHerald
 
     get '/app.html' do
       if PuppetHerald::is_in_prod?
+        @minified = '.min'
         @files = ['/app.min.js']
       else
+        @minified = ''
         @files = PuppetHerald::Javascript::files
       end
       erb :app
@@ -67,10 +69,11 @@ module PuppetHerald
 
     get '/version.json' do
       content_type 'application/json'
-      { 
-        :version => PuppetHerald::VERSION,
-        :summary => PuppetHerald::SUMMARY
-      }.to_json
+      ver = {}
+      [:VERSION, :LICENSE, :NAME, :PACKAGE, :SUMMARY, :DESCRIPTION, :HOMEPAGE].each do |const|
+        ver[const.downcase] = PuppetHerald::const_get const
+      end
+      ver.to_json
     end
 
     namespace '/api' do

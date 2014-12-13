@@ -17,7 +17,10 @@
       <tr ng-repeat="node in nodes.all | orderBy:'last_run'">
         <td>{{ $index + 1 }}</td>
         <td>{{ node.name }}</td>
-        <td ng-init="status = node.status" status-label></td>
+        <td><ng-status-button
+          status="node.status"
+          id="node.id"
+          route="'/node/:id'"></ng-status-button></td>
         <td>{{ node.no_of_reports }}</td>
         <td am-time-ago="node.last_run"></td>
       </tr>
