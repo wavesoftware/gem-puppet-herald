@@ -20,42 +20,14 @@ Gem::Specification.new do |gem|
   # Dependencies
   gem.required_ruby_version = '>= 1.9.2'
 
-  prydebugger = if RUBY_VERSION >= "2.0.0" then 'pry-byebug' else 'pry-debugger' end
-  dependencies = {
-    :runtime     => [
-      'rake',
-      'sinatra',
-      'sinatra-contrib',
-      'sinatra-activerecord',
-      'micro-optparse',
-      'uglifier',
-      'sqlite3',
-      'pg',
-      'puma'
-    ],
-    :test        => [
-      'rspec',
-      'rspec-its',
-      'coveralls',
-      'simplecov'
-    ],
-    :developmant => [
-      'inch',
-      'travis',
-      'travis-lint',
-      prydebugger
-    ]
-  }
+  # Runtime
+  gem.add_runtime_dependency 'sinatra',              '~> 1.4'
+  gem.add_runtime_dependency 'sinatra-contrib',      '~> 1.4'
+  gem.add_runtime_dependency 'sinatra-activerecord', '~> 2.0'
+  gem.add_runtime_dependency 'micro-optparse',       '~> 1.2'
+  gem.add_runtime_dependency 'uglifier',             '~> 2.6'
 
-  dependencies[:runtime].each do |spec|
-    gem.add_runtime_dependency spec
-  end
-  dependencies[:test].each do |spec|
-    gem.add_development_dependency spec
-  end
-  dependencies[:developmant].each do |spec|
-    gem.add_development_dependency spec
-  end
+  # Development and test dependencies specified in Gemfile
   
 end
 

@@ -9,11 +9,7 @@ module PuppetHerald
   @@root = File.dirname(File.dirname(File.realpath(__FILE__)))
 
   def self.relative_dir dir
-    File.join @@root, dir
-  end
-
-  def self.port
-    @@port
+    File.realpath(File.join @@root, dir)
   end
 
   def self.environment
@@ -31,7 +27,23 @@ module PuppetHerald
   def self.is_in_prod?
     return !is_in_dev?
   end
+
+  def self.bug ex
+    file = Tempfile.new(['puppet-herald-bug', '.log'])
+    filepath = file.path
+    file.close
+    file.unlink
+    message = "v#{PuppetHerald::VERSION}-#{ex.class.to_s}: #{ex.message}"
+    contents = message + "\n\n" + ex.backtrace.join("\n") + "\n"
+    File.write(filepath, contents)
+    bugo = {
+      :message  => message,
+      :homepage => PuppetHerald::HOMEPAGE,
+      :bugfile  => filepath,
+      :help     => "Please report this bug to #{PuppetHerald::HOMEPAGE} by passing contents of bug file: #{filepath}"
+    }
+    return bugo
+  end
 end
 
 require 'puppet-herald/database'
-require 'puppet-herald/app'

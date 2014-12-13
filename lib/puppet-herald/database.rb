@@ -1,10 +1,16 @@
 require 'fileutils'
+require 'logger'
 
 module PuppetHerald
   class Database
 
     @@dbconn   = nil
     @@passfile = nil
+    @@logger = Logger.new STDOUT
+
+    def self.logger
+      @@logger
+    end
 
     def self.dbconn= dbconn
       @@dbconn = dbconn
@@ -14,18 +20,23 @@ module PuppetHerald
       @@passfile = passfile
     end
 
-    def self.validate! echo=false
-      db = URI.parse(@@dbconn)
+    def self.spec echo=false
+      return nil if @@dbconn.nil?
       connection = {}
-      if db.scheme.to_s.empty?
-        raise "Database scheme couldn't be empty! Connection string given: #{@@dbconn}"
+      match = @@dbconn.match(/^(sqlite3?|postgres(?:ql)?):\/\/(.+)$/)
+      unless match
+        raise "Invalid database connection string given: #{@@dbconn}"
       end
-      if ['sqlite', 'sqlite3'].include? db.scheme
-        file = File.expand_path("#{db.host}#{db.path}")
-        FileUtils.touch file
+      if ['sqlite', 'sqlite3'].include? match[1]
+        dbname = match[2]
+        unless dbname.match /^(?:file:)?:mem/
+          dbname = File.expand_path(dbname)
+          FileUtils.touch dbname
+        end
         connection[:adapter]  = 'sqlite3'
-        connection[:database] = file
+        connection[:database] = dbname
       else
+        db = URI.parse @@dbconn
         dbname = db.path[1..-1]
         connection[:adapter]  = db.scheme == 'postgres' ? 'postgresql' : db.scheme
         connection[:host]     = db.host
@@ -38,13 +49,9 @@ module PuppetHerald
       if echo
         copy = connection.dup
         copy[:password] = '***' unless copy[:password].nil?
-        puts "Using #{copy.inspect} for database."
+        logger.info "Using #{copy.inspect} for database."
       end
       return connection
-    end
-
-    def self.setup app
-      ActiveRecord::Base.establish_connection(validate!)
     end
   end
 end

@@ -10,4 +10,4 @@ rescue LoadError
 end
 
 # Process command line options and run Puppet Herald
-PuppetHerald::CLI.parse_options
+PuppetHerald::CLI.run!

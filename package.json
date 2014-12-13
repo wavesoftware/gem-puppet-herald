@@ -1,0 +1,40 @@
+{
+  "name": "puppet-herald",
+  "version": "0.1.1",
+  "description": "Provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports.",
+  "main": "lib/puppet-herald/public/app.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "angular": "1.3.x",
+    "angular-route": "1.3.x",
+    "angular-loader": "1.3.x",
+    "angular-mocks": "1.3.x"
+  },
+  "devDependencies": {
+    "jasmine-core": "~2.1.0",
+    "karma-jasmine": "~0.3.0",
+    "karma": "~0.12.0",
+    "phantomjs": "~1.9.0",
+    "karma-phantomjs-launcher": "~0.1"
+  },
+  "scripts": {
+    "test": "test/javascript/karma.conf.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wavesoftware/gem-puppet-herald.git"
+  },
+  "keywords": [
+    "puppet",
+    "reports",
+    "herald"
+  ],
+  "author": "Krzysztof Suszynski",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/wavesoftware/gem-puppet-herald/issues"
+  },
+  "homepage": "https://github.com/wavesoftware/gem-puppet-herald"
+}
