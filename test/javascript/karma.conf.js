@@ -1,6 +1,8 @@
 module.exports = function(config) {
   config.set({
 
+    basePath: '../..',
+
     singleRun: true,
 
     frameworks: ['jasmine'],
@@ -11,12 +13,13 @@ module.exports = function(config) {
       // source files, that you wanna generate coverage for
       // do not include tests or libraries
       // (these files will be instrumented by Istanbul)
-      '../../lib/puppet-herald/public/**/*.js': ['coverage']
+      'lib/puppet-herald/public/**/*.js': ['coverage'],
+      'lib/puppet-herald/public/**/*.html': ['ng-html2js']
     },
 
     // optionally, configure the reporter
     coverageReporter: {
-      dir : '../../coverage/javascript',
+      dir : 'coverage/javascript',
       reporters: [
         // reporters not supporting the `file` property
         { type: 'html', subdir: 'report-html' },
@@ -28,13 +31,19 @@ module.exports = function(config) {
       ]
     },
 
+    ngHtml2JsPreprocessor: {
+      // strip this from the file path
+      stripPrefix: 'lib/puppet-herald/public/',
+    },
+
     files: [
-      '../../node_modules/angular/angular.js',
-      '../../node_modules/angular-loader/angular-loader.js',
-      '../../node_modules/angular-mocks/angular-mocks.js',
-      '../../node_modules/angular-route/angular-route.js',
-      '../../lib/puppet-herald/public/**/*.js',
-      'src/**/*.js'
+      'node_modules/angular/angular.js',
+      'node_modules/angular-loader/angular-loader.js',
+      'node_modules/angular-mocks/angular-mocks.js',
+      'node_modules/angular-route/angular-route.js',
+      'lib/puppet-herald/public/**/*.js',
+      'lib/puppet-herald/public/**/*.html',
+      'test/javascript/src/**/*.js'
     ]
   });
 };

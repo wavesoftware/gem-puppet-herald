@@ -19,7 +19,8 @@
     "phantomjs": "~1.9.0",
     "karma-story-reporter": "~0.2",
     "karma-coverage": "~0.1",
-    "karma-phantomjs-launcher": "~0.1"
+    "karma-phantomjs-launcher": "~0.1",
+    "karma-ng-html2js-preprocessor": "~0.1"
   },
   "scripts": {
     "test": "test/javascript/karma.conf.js"
