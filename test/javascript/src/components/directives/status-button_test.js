@@ -7,6 +7,29 @@ describe('herald.directives module', function() {
 
     beforeEach(module('herald.directives.status-button'));
 
+    describe('StatusButtonController', function() {
+      var controller, scope, location;
+      
+      beforeEach(inject(function($injector) {
+        var $controller = $injector.get('$controller');
+        var $rootScope = $injector.get('$rootScope');
+        location = $injector.get('$location');
+        $rootScope.$on('$locationChangeStart', function(event, args) {
+          event.preventDefault();
+        })
+        var $scope = {};
+        scope = $scope;
+        controller = $controller('StatusButtonController', { $scope: $scope });
+      }));
+
+      it('should navigate to "/node/112" after issuing navigate() function', function() {
+        spyOn(location, 'path').and.returnValue(null);
+        expect(scope.navigate('/node/:id', 112)).toBe(undefined);
+        expect(location.path).toHaveBeenCalledWith('/node/112');
+      });
+
+    });
+
     describe('colorizeStatus filter', function() {
 
       var colorizeStatus;
@@ -123,6 +146,9 @@ describe('herald.directives module', function() {
         });
         it('should embed a button with text " UNCHANGED"', function() {
           expect(button.text()).toEqual(' UNCHANGED');
+        });
+        it('should embed a button with onclick == "navigate(route, id)"', function() {
+          expect(button.attr('ng-click')).toEqual("navigate(route, id)");
         });
 
       });
