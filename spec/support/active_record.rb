@@ -1,19 +1,15 @@
-require 'puppet-herald/database'
-require 'active_record'
-require 'stringio'        # silence the output
-$stdout = StringIO.new    # from migrator
+require 'support/reconnectdb'
 
-PuppetHerald::Database.dbconn = 'sqlite3://:memory:'
-ActiveRecord::Base.establish_connection(PuppetHerald::Database.spec)
-ActiveRecord::Migrator.up "db/migrate"
-
-$stdout = STDOUT
+reconnectdb
 
 RSpec.configure do |config|
   config.around(:example, {:rollback => true}) do |example|
+    ActiveRecord::Base.logger.level = 2 unless ActiveRecord::Base.logger.nil?
     ActiveRecord::Base.transaction do
       example.run
-      raise ActiveRecord::Rollback
+      if ActiveRecord::Base.connection.open_transactions > 0
+        raise ActiveRecord::Rollback
+      end
     end
   end
 end

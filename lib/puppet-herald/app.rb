@@ -33,6 +33,15 @@ module PuppetHerald
       end
     end
 
+    get %r{/-----------------force-err/(.*)} do |type|
+      if PuppetHerald::is_in_dev?
+        content_type type
+        raise 'an expected error'
+      end
+      content_type 'application/json'
+      {:status => :ok}.to_json
+    end
+
     get %r{/app\.min\.(js\.map|js)} do |ext|
       content_type 'application/javascript'
       ugly = PuppetHerald::Javascript::uglify '/app.min.js.map'
