@@ -7,7 +7,8 @@ module.exports = function(config) {
       '../../node_modules/angular-loader/angular-loader.js',
       '../../node_modules/angular-mocks/angular-mocks.js',
       '../../node_modules/angular-route/angular-route.js',
-      '../../lib/puppet-herald/public/**/*_test.js'
+      '../../lib/puppet-herald/public/**/*.js',
+      'src/**/*.js'
     ]
   });
 };

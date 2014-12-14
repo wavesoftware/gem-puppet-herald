@@ -3,7 +3,7 @@ language: ruby
 bundler_args: --without development
 script:
   - bundle exec rake test
-  # - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS test/javascript/karma.conf.js
+  - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS test/javascript/karma.conf.js
 before_install: rm -f Gemfile.lock
 before_script:
   - npm install
