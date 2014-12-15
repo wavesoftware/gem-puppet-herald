@@ -28,8 +28,8 @@ describe 'The Herald App' do
   before(:all) { reconnectdb }
 
   def app
-    require 'puppet-herald/app'
-    PuppetHerald::App
+    require 'puppet-herald/application'
+    PuppetHerald::Application
   end
 
   describe "on '/' redirects to '/app.html'" do
@@ -95,12 +95,12 @@ describe 'The Herald App' do
         before { expect(PuppetHerald).to receive(:is_in_dev?).and_return true }
         it { expect(subject).not_to be_ok }
         it { expect(subject.status).to eq 500 }
-        it { expect(subject.content_type).to eq 'application/json' }
+        it { expect(subject.content_type).to include 'text/html' }
         it { expect(subject.body).not_to be_empty }
       end
     end
     context 'while in standard WWW' do
-      subject { get '/-----------------force-err/html/text' }
+      subject { get '/-----------------force-err/text/html' }
       context 'in production' do
         before { expect(PuppetHerald).to receive(:is_in_dev?).and_return false }
         it_behaves_like 'a proper 200 - success'
@@ -110,7 +110,7 @@ describe 'The Herald App' do
       context 'in dev' do
         before { expect(PuppetHerald).to receive(:is_in_dev?).and_return true }
         it { expect(subject).not_to be_ok }
-        it { expect(subject.content_type).to eq 'html/text' }
+        it { expect(subject.content_type).to include 'text/html' }
         it { expect(subject.status).to eq 500 }
         it { expect(subject.body).not_to be_empty }
       end

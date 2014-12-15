@@ -27,8 +27,8 @@ module PuppetHerald
       @@retcode = 0
       begin
         options = parse_options argv
-        require 'puppet-herald/app'
-        PuppetHerald::App.run! options
+        require 'puppet-herald/application'
+        PuppetHerald::Application.run! options
       rescue Exception => ex
         bug = PuppetHerald.bug(ex)
         errlogger.fatal "Unexpected error occured, mayby a bug?\n\n#{bug[:message]}\n\n#{bug[:help]}"

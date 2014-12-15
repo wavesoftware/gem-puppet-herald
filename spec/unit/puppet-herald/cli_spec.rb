@@ -33,9 +33,9 @@ context 'With silenced loggers' do
     context 'on defaults' do
       let(:argv) { [] }
       before :each do
-        require 'puppet-herald/app'
+        require 'puppet-herald/application'
         expect(Kernel).to receive(:exit).with(0)
-        expect(PuppetHerald::App).to receive(:run!).and_return :none
+        expect(PuppetHerald::Application).to receive(:run!).and_return :none
       end
 
       it { expect(subject).to be_nil }

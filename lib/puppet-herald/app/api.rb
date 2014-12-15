@@ -1,37 +1,16 @@
 require 'sinatra/base'
 require 'sinatra/namespace'
-require 'sinatra/activerecord'
 require 'puppet-herald'
-require 'puppet-herald/javascript'
+require 'puppet-herald/app/configuration'
 require 'puppet-herald/models/node'
 require 'puppet-herald/models/report'
 
 module PuppetHerald
-  class App < Sinatra::Base
+module App
+
+  class Api < Sinatra::Base
     register Sinatra::Namespace
-    register Sinatra::ActiveRecordExtension
-
-    set :database, PuppetHerald::Database.spec unless PuppetHerald::Database.spec.nil?
-    if PuppetHerald::is_in_dev?
-      set :environment, :development
-    else
-      set :environment, :production
-    end
-
-    def self.run! options = {}, &block
-      ActiveRecord::Base.establish_connection(PuppetHerald::Database.spec)
-      ActiveRecord::Migrator.up "db/migrate"
-      super options, *block
-    end
-
-    error do
-      @bug = PuppetHerald::bug(env['sinatra.error'])
-      if response.content_type == 'application/json'
-        @bug.to_json
-      else
-        erb :err500
-      end
-    end
+    use PuppetHerald::App::Configuration
 
     get %r{/-----------------force-err/(.*)} do |type|
       if PuppetHerald::is_in_dev?
@@ -40,31 +19,6 @@ module PuppetHerald
       end
       content_type 'application/json'
       {:status => :ok}.to_json
-    end
-
-    get %r{/app\.min\.(js\.map|js)} do |ext|
-      content_type 'application/javascript'
-      ugly = PuppetHerald::Javascript::uglify '/app.min.js.map'
-      ugly[ext]
-    end
-    
-    get '/' do
-      redirect "/app.html", 301
-    end
-
-    get '/index.html' do
-      redirect "/app.html", 301
-    end
-
-    get '/app.html' do
-      if PuppetHerald::is_in_prod?
-        @minified = '.min'
-        @files = ['/app.min.js']
-      else
-        @minified = ''
-        @files = PuppetHerald::Javascript::files
-      end
-      erb :app
     end
 
     get '/version.json' do
@@ -109,4 +63,6 @@ module PuppetHerald
       end
     end
   end
+
+end
 end
