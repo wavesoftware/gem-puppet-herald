@@ -41,6 +41,8 @@ module.exports = function(config) {
       'node_modules/angular-loader/angular-loader.js',
       'node_modules/angular-mocks/angular-mocks.js',
       'node_modules/angular-route/angular-route.js',
+      'node_modules/moment/moment.js',
+      'node_modules/angular-moment/angular-moment.js',
       'lib/puppet-herald/public/**/*.js',
       'lib/puppet-herald/public/**/*.html',
       'test/javascript/src/**/*.js'
