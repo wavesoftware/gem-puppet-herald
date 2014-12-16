@@ -150,10 +150,10 @@ Install the necessary gems (gems will be downloaded to private .vendor directory
 bundle install --path .vendor
 ```
 
-And then run the unit tests (for integration tests simply swap `spec` to `integration`):
+And then run the unit tests (for integration tests simply swap `unit` to `integration`):
 
 ```shell
-bundle exec rake spec
+bundle exec rake spec:unit
 ```
 
 You can run single test with:
@@ -179,7 +179,7 @@ npm install
 And then test Javascript code with:
 
 ```shell
-./node_modules/karma/bin/karma start --single-run --browsers PhantomJS test/javascript/karma.conf.js
+bundle exec rake js
 ```
 
 ###Contributing
