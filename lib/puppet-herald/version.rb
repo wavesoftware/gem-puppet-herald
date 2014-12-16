@@ -1,12 +1,11 @@
 module PuppetHerald
-  
-  def self.version_prep desired
+  def self.version_prep(desired)
     version = desired
     if desired.match(/[^0-9\.]+/)
       git = `git describe --tags --dirty --always`
-      version += "." + git.gsub('-', '.')
+      version += '.' + git.gsub('-', '.')
     end
-    return version.strip
+    version.strip
   end
 
   VERSION     = version_prep '0.1.2.pre'
@@ -14,7 +13,6 @@ module PuppetHerald
   NAME        = 'Puppet Herald'
   PACKAGE     = 'puppet-herald'
   SUMMARY     = 'a Puppet report processor'
-  DESCRIPTION = "Provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports."
+  DESCRIPTION = 'Provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports.'
   HOMEPAGE    = 'https://github.com/wavesoftware/gem-puppet-herald'
-
 end

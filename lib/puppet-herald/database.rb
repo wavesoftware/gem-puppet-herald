@@ -2,7 +2,6 @@ require 'fileutils'
 require 'logger'
 
 module PuppetHerald
-
   # A class for a database configuration
   class Database
     @@dbconn   = nil
@@ -17,28 +16,28 @@ module PuppetHerald
 
     # Sets a database connection
     # @return [String] a dbconnection string
-    def self.dbconn= dbconn
+    def self.dbconn=(dbconn)
       @@dbconn = dbconn
     end
 
     # Sets a passfile
     # @return [String] a password file
-    def self.passfile= passfile
+    def self.passfile=(passfile)
       @@passfile = passfile
     end
 
     # Compiles a spec for database creation
-    # 
+    #
     # @param echo [Boolean] should echo logs on screen?
     # @return [Hash] a database configuration
-    def self.spec echo=false
+    def self.spec(echo = false)
       return nil if @@dbconn.nil?
       connection = {}
       match = @@dbconn.match(/^(sqlite3?|postgres(?:ql)?):\/\/(.+)$/)
       unless match
-        raise "Invalid database connection string given: #{@@dbconn}"
+        fail "Invalid database connection string given: #{@@dbconn}"
       end
-      if ['sqlite', 'sqlite3'].include? match[1]
+      if %w(sqlite sqlite3).include? match[1]
         dbname = match[2]
         unless dbname.match /^(?:file:)?:mem/
           dbname = File.expand_path(dbname)
@@ -62,7 +61,7 @@ module PuppetHerald
         copy[:password] = '***' unless copy[:password].nil?
         logger.info "Using #{copy.inspect} for database."
       end
-      return connection
+      connection
     end
   end
 end

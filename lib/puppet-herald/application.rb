@@ -9,16 +9,15 @@ module PuppetHerald
     use PuppetHerald::App::Configuration
     use PuppetHerald::App::Frontend
     use PuppetHerald::App::Api
-    
+
     # Executes the Herald application
-    # 
+    #
     # @param options [Hash] an extra options for Rack server
     # @param block [block] an extra configuration block
     # @return [Sinatra::Application] an Herald application
-    def self.run! options = {}, &block
+    def self.run!(options = {}, &block)
       PuppetHerald::App::Configuration.dbmigrate!
       super options, *block
     end
-
   end
 end

@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary       = PuppetHerald::SUMMARY
   gem.description   = PuppetHerald::DESCRIPTION
 
-  gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  gem.executables   = `git ls-files -- bin/*`.split("\n").map { |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   gem.require_paths = ['lib']
@@ -26,7 +26,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sinatra-activerecord', '~> 2.0'
   gem.add_runtime_dependency 'micro-optparse',       '~> 1.2'
   gem.add_runtime_dependency 'uglifier',             '~> 2.6'
-
 end
 
 # vim:ft=ruby
