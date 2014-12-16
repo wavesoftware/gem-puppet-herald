@@ -5,8 +5,7 @@ require 'puppet-herald/app/configuration'
 require 'puppet-herald/models/node'
 require 'puppet-herald/models/report'
 
-module PuppetHerald
-module App
+module PuppetHerald::App
 
   class Api < Sinatra::Base
     register Sinatra::Namespace
@@ -36,33 +35,32 @@ module App
         put '/provide-log' do
           content_type 'application/json'
           yaml = request.body.read
-          report = Report.create_from_yaml yaml
+          report = PuppetHerald::Models::Report.create_from_yaml yaml
 
           {:status => :ok}.to_json
         end
 
         get '/nodes' do
           content_type 'application/json'
-          nodes = Node.all
+          nodes = PuppetHerald::Models::Node.all
           nodes.to_json
         end
 
         get '/node/:id' do
           content_type 'application/json'
           id = params[:id]
-          Node.get_with_reports(id).
+          PuppetHerald::Models::Node.get_with_reports(id).
             to_json(:include => :reports)
         end
 
         get '/report/:id' do
           content_type 'application/json'
           id = params[:id]
-          Report.get_with_log_entries(id).
+          PuppetHerald::Models::Report.get_with_log_entries(id).
             to_json(:include => :log_entries)
         end
       end
     end
   end
 
-end
 end

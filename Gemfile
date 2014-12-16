@@ -17,6 +17,7 @@ group :development do
 
   gem 'inch',             '~> 0.5'
   gem 'travis',           '~> 1.6'
+  gem 'rubocop',          '~> 0.28'
   gem 'pry-byebug',       '~> 2.0'   if RUBY_VERSION >= '2.0.0'
   gem 'pry-debugger',     '~> 0.2'   if RUBY_VERSION < '2.0.0'
 

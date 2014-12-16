@@ -1,6 +1,7 @@
 
 require 'sinatra/activerecord/rake'
 require 'rspec/core/rake_task'
+require 'rubocop/rake_task'
 require 'fileutils'
 
 desc "Run all spec tests at once."
@@ -29,10 +30,22 @@ task :javascript do |t|
   puts File.read(path)
 end
 
+desc "Runs inch analysis of Ruby docs."
+task :inch do |t|
+  sh 'inch --pedantic'
+end
+
+RuboCop::RakeTask.new(:rubocop) do |task|
+  # don't abort rake on failure
+  task.fail_on_error = true
+end
+
 desc "Run lint, and spec tests."
 task :test => [
+  :rubocop,
   :all,
-  :javascript
+  :javascript,
+  :inch
 ]
 
 task :default => :test

@@ -2,24 +2,35 @@ require 'fileutils'
 require 'logger'
 
 module PuppetHerald
-  class Database
 
+  # A class for a database configuration
+  class Database
     @@dbconn   = nil
     @@passfile = nil
     @@logger = Logger.new STDOUT
 
+    # Gets a logger for database
+    # @return [Logger] a logger
     def self.logger
       @@logger
     end
 
+    # Sets a database connection
+    # @return [String] a dbconnection string
     def self.dbconn= dbconn
       @@dbconn = dbconn
     end
 
+    # Sets a passfile
+    # @return [String] a password file
     def self.passfile= passfile
       @@passfile = passfile
     end
 
+    # Compiles a spec for database creation
+    # 
+    # @param echo [Boolean] should echo logs on screen?
+    # @return [Hash] a database configuration
     def self.spec echo=false
       return nil if @@dbconn.nil?
       connection = {}

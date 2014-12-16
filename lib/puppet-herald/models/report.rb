@@ -2,6 +2,8 @@ require 'puppet-herald/models/log-entry'
 require 'puppet-herald/models/node'
 require 'puppet-herald/stubs/puppet'
 
+module PuppetHerald::Models
+
 class Report < ActiveRecord::Base
   belongs_to :node
   has_many   :log_entries, dependent: :delete_all
@@ -75,4 +77,6 @@ class Report < ActiveRecord::Base
       to.send "#{at}=", value
     end
   end
+end
+
 end

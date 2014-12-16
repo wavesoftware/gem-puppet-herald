@@ -4,14 +4,21 @@ rescue LoadError
   # Do nothing here
 end
 
+# A module for Herald
 module PuppetHerald
 
   @@root = File.dirname(File.dirname(File.realpath(__FILE__)))
 
+  # Calculates a replative directory inside the project
+  #
+  # @param dir [String] a sub directory
+  # @return [String] a full path to replative dir
   def self.relative_dir dir
     File.realpath(File.join @@root, dir)
   end
 
+  # Gets the environment set for Herald
+  # @return [Symbol] an environment
   def self.environment
     env = :production
     unless ENV['PUPPET_HERALD_ENV'].nil?
@@ -20,14 +27,24 @@ module PuppetHerald
     return env
   end
 
+  # Checks is running in DEVELOPMENT kind of environment (dev, ci, test)
+  #
+  # @return [Boolean] true if runs in development
   def self.is_in_dev?
     return [:development, :dev, :test, :ci].include? environment
   end
 
+  # Checks is running in production environment
+  #
+  # @return [Boolean] true if runs in production
   def self.is_in_prod?
     return !is_in_dev?
   end
 
+  # Reports a bug in desired format
+  #
+  # @param ex [Exception] an exception that was thrown
+  # @return [Hash] a hash with info about bug to be displayed to user
   def self.bug ex
     file = Tempfile.new(['puppet-herald-bug', '.log'])
     filepath = file.path
@@ -45,5 +62,3 @@ module PuppetHerald
     return bugo
   end
 end
-
-require 'puppet-herald/database'

@@ -2,19 +2,19 @@ require 'model_helper'
 require 'puppet-herald/models/report'
 require 'puppet-herald/models/log-entry'
 
-describe Report, ".create_from_yaml", :rollback => true do
+describe PuppetHerald::Models::Report, ".create_from_yaml", :rollback => true do
   context 'for valid YAML' do
     let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
     it 'that is really not empty' do
       yaml.should_not be_empty
     end
     context 'running on real sqlite3 db' do
-      subject { Report.create_from_yaml yaml }
+      subject { PuppetHerald::Models::Report.create_from_yaml yaml }
       it "should return value that isn't nil" do
         subject.should_not be_nil
       end
       it "should return a report object" do
-        subject.class.should eq(Report)
+        subject.class.should eq(PuppetHerald::Models::Report)
       end
       it "should return persisted report" do
         subject.persisted?.should be_truthy
@@ -37,18 +37,18 @@ describe Report, ".create_from_yaml", :rollback => true do
   end
 end
 
-describe Report, '.get_with_log_entries', :rollback => true do
+describe PuppetHerald::Models::Report, '.get_with_log_entries', :rollback => true do
   let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
-  let(:id)   { Report.create_from_yaml(yaml).id }
+  let(:id)   { PuppetHerald::Models::Report.create_from_yaml(yaml).id }
 
   context 'fetching an existing report' do
-    subject { Report.get_with_log_entries id }
+    subject { PuppetHerald::Models::Report.get_with_log_entries id }
     
     it "should return value that isn't nil" do
       subject.should_not be_nil
     end
     it "should return a report object" do
-      subject.class.should eq(Report)
+      subject.class.should eq(PuppetHerald::Models::Report)
     end
     it "should return persisted report" do
       subject.persisted?.should be_truthy

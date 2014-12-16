@@ -1,0 +1,25 @@
+# This is the configuration used to check the rubocop source code.
+
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Include:
+    - 'lib/**/*.rb'
+    - 'db/**/*.rb'
+    - 'bin/*'
+    - 'Rakefile'
+    - 'Gemfile'
+    - 'puppet-herald.gemspec'
+    - 'config.ru'
+  Exclude:
+    - '.**/*'
+    - 'test/**/*'
+    - 'spec/**/*'
+    - 'node_modules/**/*'
+    - 'coverage/**/*'
+    - '.vendor/**/*'
+    - 'vendor/**/*'
+    - '.bundle/**/*'
+
+Metrics/LineLength:
+  Max: 120

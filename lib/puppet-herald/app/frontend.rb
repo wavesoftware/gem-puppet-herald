@@ -3,8 +3,7 @@ require 'puppet-herald/javascript'
 require 'sinatra/base'
 require 'sinatra/namespace'
 
-module PuppetHerald
-module App
+module PuppetHerald::App
 
   class Frontend < Sinatra::Base
     use PuppetHerald::App::Configuration
@@ -30,5 +29,4 @@ module App
 
   end
 
-end
 end

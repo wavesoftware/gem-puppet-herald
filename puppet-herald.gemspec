@@ -15,7 +15,7 @@ Gem::Specification.new do |gem|
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  gem.require_paths = ["lib"]
+  gem.require_paths = ['lib']
 
   # Dependencies
   gem.required_ruby_version = '>= 1.9.2'
@@ -27,8 +27,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'micro-optparse',       '~> 1.2'
   gem.add_runtime_dependency 'uglifier',             '~> 2.6'
 
-  # Development and test dependencies specified in Gemfile
-  
 end
 
 # vim:ft=ruby

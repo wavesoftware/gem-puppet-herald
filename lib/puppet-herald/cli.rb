@@ -23,6 +23,10 @@ module PuppetHerald
       @@errlogger
     end
 
+    # Executes an Herald app from CLI
+    #
+    # @param argv [Hash] an argv from CLI
+    # @return [Integer] a status code for program
     def self.run! argv=ARGV
       @@retcode = 0
       begin
@@ -37,7 +41,9 @@ module PuppetHerald
       Kernel::exit @@retcode
     end
 
-    def self.parse_options argv
+    private
+
+    def self.parser
       usage = ""
       banner = <<-eos
 #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} - #{PuppetHerald::SUMMARY}
@@ -53,14 +59,22 @@ CAUTION! For security reasons, don't pass password in connection string, use --p
       home = File.expand_path('~')
       defaultdb     = "sqlite://#{home}/pherald.db"
       defaultdbpass = "#{home}/.pherald.pass"
-      parser = Parser.new do |p|
+      parser_o = Parser.new do |p|
         p.banner = banner
         p.version = PuppetHerald::VERSION
         p.option :bind, "Hostname to bind to", :default => 'localhost'
         p.option :port, "Port to use", :default => 11303, :value_satisfies => lambda {|x| x >= 100 && x <= 65000}
         p.option :dbconn, "Connection string to database, see info above", :default => defaultdb
-        p.option :passfile, "If using postgresql, this file will be read for password to database", :default => defaultdbpass
+        p.option(
+          :passfile, 
+          "If using postgresql, this file will be read for password to database", 
+          :default => defaultdbpass
+        )
       end
+      return parser_o
+    end
+
+    def self.parse_options argv
       options = parser.process!(argv)
 
       logger.info "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} in #{PuppetHerald::environment}..."
@@ -76,5 +90,6 @@ CAUTION! For security reasons, don't pass password in connection string, use --p
 
       return options
     end
+
   end
 end
