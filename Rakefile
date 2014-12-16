@@ -44,8 +44,7 @@ desc "Run lint, and spec tests."
 task :test => [
   :rubocop,
   :all,
-  :javascript,
-  :inch
+  :javascript
 ]
 
 task :default => :test
