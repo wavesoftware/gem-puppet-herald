@@ -16,7 +16,7 @@ module PuppetHerald::App
     end
 
     get '/app.html' do
-      if PuppetHerald.is_in_prod?
+      if PuppetHerald.in_prod?
         @minified = '.min'
         @files = ['/app.min.js']
       else

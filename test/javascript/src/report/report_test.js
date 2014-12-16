@@ -41,13 +41,13 @@ describe('herald.report module', function() {
 
         $routeParams.reportId = id;
         // backend definition common for all tests
-        var handler = $httpBackend.when('GET', '/api/v1/report/' + id);
+        var handler = $httpBackend.when('GET', '/api/v1/reports/' + id);
         if (mockValues != null) {
           handler.respond(mockValues);
         } else {
           handler.respond(404, null);
         }
-        $httpBackend.expectGET('/api/v1/report/' + id);
+        $httpBackend.expectGET('/api/v1/reports/' + id);
         var ctrl = $controller('ReportController', { $scope : $rootScope });
         $httpBackend.flush();
         return ctrl;
@@ -59,7 +59,7 @@ describe('herald.report module', function() {
       $httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('fetching data from "/api/v1/report/1"', function() {
+    describe('fetching data from "/api/v1/reports/1"', function() {
       var ctrl;
       beforeEach(function() {
         ctrl = controller();
@@ -76,7 +76,7 @@ describe('herald.report module', function() {
         expect(Page.actualTarget()).toBe('1234578');
       });
     });
-    describe('fetching data from "/api/v1/report/12"', function() {
+    describe('fetching data from "/api/v1/reports/12"', function() {
       var ctrl;
       beforeEach(function() {
         ctrl = controller(12, null);

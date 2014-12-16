@@ -1,4 +1,8 @@
 module PuppetHerald
+  # Prepare version
+  #
+  # @param desired [String] a desired version
+  # @return [String] a prepared version
   def self.version_prep(desired)
     version = desired
     if desired.match(/[^0-9\.]+/)
@@ -8,7 +12,7 @@ module PuppetHerald
     version.strip
   end
 
-  VERSION     = version_prep '0.1.2.pre'
+  VERSION     = version_prep '0.2.0.pre'
   LICENSE     = 'Apache 2.0'
   NAME        = 'Puppet Herald'
   PACKAGE     = 'puppet-herald'

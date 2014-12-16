@@ -5,7 +5,7 @@ require 'puppet-herald/javascript'
 describe PuppetHerald::Javascript, '.files' do
   context 'running in dev environment' do
     before :each do
-      expect(PuppetHerald).to receive(:is_in_dev?).twice.and_return true
+      expect(PuppetHerald).to receive(:in_dev?).twice.and_return true
       expect(Dir).to receive(:glob).twice.and_return(['aaa.js', 'a/bbb.js', 'ccc_test.js'])
       PuppetHerald::Javascript::files
     end
@@ -20,7 +20,7 @@ describe PuppetHerald::Javascript, '.files' do
 
   context 'running in prod environment' do
     before :each do
-      expect(PuppetHerald).to receive(:is_in_dev?).twice.and_return false
+      expect(PuppetHerald).to receive(:in_dev?).twice.and_return false
       expect(Dir).to receive(:glob).once.and_return(['aaa.js', 'a/bbb.js', 'ccc_test.js'])
       PuppetHerald::Javascript::files
     end

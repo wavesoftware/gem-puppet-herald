@@ -36,13 +36,13 @@ describe('herald.node module', function() {
 
         $routeParams.nodeId = id;
         // backend definition common for all tests
-        var handler = $httpBackend.when('GET', '/api/v1/node/' + id);
+        var handler = $httpBackend.when('GET', '/api/v1/nodes/' + id);
         if (mockValues != null) {
           handler.respond(mockValues);
         } else {
           handler.respond(404, null);
         }
-        $httpBackend.expectGET('/api/v1/node/' + id);
+        $httpBackend.expectGET('/api/v1/nodes/' + id);
         var ctrl = $controller('NodeController', { $scope : $rootScope });
         $httpBackend.flush();
         return ctrl;
@@ -54,7 +54,7 @@ describe('herald.node module', function() {
       $httpBackend.verifyNoOutstandingRequest();
     });
 
-    describe('fetching data from "/api/v1/node/1"', function() {
+    describe('fetching data from "/api/v1/nodes/1"', function() {
       it('there should be node fetched', function() {
         expect(controller().node).not.toEqual(null);
       });
@@ -69,7 +69,7 @@ describe('herald.node module', function() {
         expect(Page.actualTarget()).toBe('master.cl.vm');
       });
     });
-    describe('fetching data from "/api/v1/node/12"', function() {
+    describe('fetching data from "/api/v1/nodes/12"', function() {
       var ctrl;
       beforeEach(function() {
         ctrl = controller(12, null);

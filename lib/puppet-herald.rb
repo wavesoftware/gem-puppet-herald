@@ -29,15 +29,15 @@ module PuppetHerald
   # Checks is running in DEVELOPMENT kind of environment (dev, ci, test)
   #
   # @return [Boolean] true if runs in development
-  def self.is_in_dev?
+  def self.in_dev?
     [:development, :dev, :test, :ci].include? environment
   end
 
   # Checks is running in production environment
   #
   # @return [Boolean] true if runs in production
-  def self.is_in_prod?
-    !is_in_dev?
+  def self.in_prod?
+    !in_dev?
   end
 
   # Reports a bug in desired format

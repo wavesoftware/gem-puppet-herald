@@ -8,7 +8,7 @@ module PuppetHerald
     @@base = 'lib/puppet-herald/public'
 
     def self.files
-      if PuppetHerald.is_in_dev?
+      if PuppetHerald.in_dev?
         @@files = nil
       end
       if @@files.nil?

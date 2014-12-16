@@ -26,7 +26,7 @@ module PuppetHerald::App
     #
     # @return [nil]
     def self.set_dblog!
-      if PuppetHerald.is_in_dev?
+      if PuppetHerald.in_dev?
         ActiveRecord::Base.logger.level = Logger::DEBUG
       else
         ActiveRecord::Base.logger.level = Logger::WARN
@@ -38,7 +38,7 @@ module PuppetHerald::App
       (req.path.start_with?('/api') || req.path.start_with?('/version.json'))
     end
 
-    if PuppetHerald.is_in_dev?
+    if PuppetHerald.in_dev?
       set :environment, :development
     else
       set :environment, :production
