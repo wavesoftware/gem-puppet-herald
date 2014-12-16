@@ -106,24 +106,42 @@ Configuring puppet master
 
 To send reports to Herald, you need to configure your puppet master to use custom report proccessor. This processor is also automatically configured if you choose to use a puppet module installation version. If not you must configure it by yourself.
 
-First create a file in your puppet module directory (you can get modulepath with command: `puppet config print modulepath`: `<puppet modules>/herald/lib/puppet/reports/herald.rb` with contents:
+First install a puppet-herald gem if you didn't do it already on puppet master:
+
+```shell
+sudo gem install puppet-herald
+```
+
+If you are running PE, run instead:
+
+```shell
+sudo /opt/puppet/bin/gem install puppet-herald
+```
+
+Then create a file in your puppet module directory (you can get modulepath with command: `puppet config print modulepath`). For example: `<puppet modules>/herald/lib/puppet/reports/herald.rb` with contents:
 
 ```ruby
 require 'puppet'
-require 'net/http'
+require 'puppet-herald/client'
 
 Puppet::Reports.register_report(:herald) do
   desc "Process reports via the Herald API."
-
   def process
-    # Post the report object (self), after dumping it to yaml:
-    port = 11303         # Set proper port for Herald
-    host = "localhost"   # Set proper host for Herald
-    path = "/api/v1/provide-log"
-    req = Net::HTTP::Put.new(path, initheader = { 'Content-Type' => 'application/yaml'})
-    req.body = self.to_yaml
-    Net::HTTP.new(host, port).start {|http| http.request(req) }
-    return true
+    PuppetHerald::Client.new.process(self)
+  end
+end
+```
+
+If you need to post to other host or port use (defaults are: `localhost` and `11303`):
+
+```ruby
+require 'puppet'
+require 'puppet-herald/client'
+
+Puppet::Reports.register_report(:herald) do
+  desc "Process reports via the Herald API."
+  def process
+    PuppetHerald::Client.new('master.secure.vm', 8082).process(self)
   end
 end
 ```
@@ -180,6 +198,13 @@ And then test Javascript code with:
 
 ```shell
 bundle exec rake js
+```
+
+Check your code for quality with:
+
+```shell
+bundle exec rake rucocop
+bundle exec rake inch
 ```
 
 ###Contributing

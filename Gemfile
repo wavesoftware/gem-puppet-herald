@@ -6,6 +6,7 @@ group :test do
   gem 'rake',             '~> 10.4'
   gem 'rspec',            '~> 3.1'
   gem 'rspec-its',        '~> 1.1'
+  gem 'webmock',          '~> 1.20'
   gem 'coveralls',        '~> 0.7'
   gem 'simplecov',        '~> 0.9'
   gem 'sqlite3',          '~> 1.3'
