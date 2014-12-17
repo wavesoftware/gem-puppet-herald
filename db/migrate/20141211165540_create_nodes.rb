@@ -1,4 +1,6 @@
+# Migration
 class CreateNodes < ActiveRecord::Migration
+  # Migration
   def change
     create_table :nodes do |t|
       t.string :name

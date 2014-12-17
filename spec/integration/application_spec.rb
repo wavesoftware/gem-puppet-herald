@@ -19,6 +19,13 @@ shared_examples 'a proper 2xx - success' do
   it { expect(subject.body).not_to be_empty }
 end
 
+shared_examples '500 - error' do
+  it { expect(subject).not_to be_successful }
+  it { expect(subject).to be_server_error }
+  it { expect(subject.status).to eq 500 }
+  it { expect(subject.body).not_to be_empty }
+end
+
 shared_examples '404 - not found' do
   it { expect(subject).not_to be_successful }
   it { expect(subject).to be_client_error }
@@ -34,6 +41,11 @@ end
 shared_examples "working API - not found" do
   it { expect(subject.content_type).to eq 'application/json' }
   it_behaves_like '404 - not found'
+end
+
+shared_examples "working API - error" do
+  it { expect(subject.content_type).to eq 'application/json' }
+  it_behaves_like '500 - error'
 end
 
 describe 'The Herald App' do
@@ -61,11 +73,11 @@ describe 'The Herald App' do
   describe "on main page '/app.html'" do
     subject { get '/app.html' }
     context 'in production' do
-      before { expect(PuppetHerald).to receive(:in_prod?).and_return true }
+      before { expect(PuppetHerald).to receive(:in_prod?).at_least(:once).and_return true }
       it { expect(subject.body).to include 'app.min.js' }
     end
     context 'in dev' do
-      before { expect(PuppetHerald).to receive(:in_prod?).and_return false }
+      before { expect(PuppetHerald).to receive(:in_prod?).at_least(:once).and_return false }
       it { expect(subject.body).not_to include 'app.min.js' }
       it { expect(subject.body).to include 'report.js' }
       it { expect(subject.body).to include 'nodes.js' }
@@ -94,39 +106,44 @@ describe 'The Herald App' do
     it { expect(subject.content_type).to eq 'application/javascript;charset=utf-8' }
   end
 
-  describe "forcing to raise a fatal error" do
+  describe "that is received a fatal error" do
     after :each do
       Dir.glob(Dir.tmpdir + '/puppet-herald-bug*.log') { |file| Pathname.new(file).unlink }
+      PuppetHerald.environment = :test
     end
     context 'while inside json API' do
-      subject { get '/-----------------force-err/application/json' }
-      context 'in production' do
-        before { expect(PuppetHerald).to receive(:in_dev?).and_return false }
-        it_behaves_like 'a proper 2xx - success'
-        it { expect(subject.content_type).to eq 'application/json' }
+      before :each do
+        expect_any_instance_of(PuppetHerald::App::ApiImplV1).to receive(:version_json).and_raise :expected
       end
-      context 'in dev' do
-        before { expect(PuppetHerald).to receive(:in_dev?).and_return true }
-        it { expect(subject).not_to be_ok }
-        it { expect(subject.status).to eq 500 }
-        it { expect(subject.content_type).to include 'text/html' }
-        it { expect(subject.body).not_to be_empty }
+      subject { get '/version.json' }
+      context 'in production environment' do
+        before :each do
+          PuppetHerald.environment = :production
+        end
+        it_behaves_like 'working API - error'
+      end
+      context 'in dev environment' do
+        before :each do
+          PuppetHerald.environment = :development
+        end
+        it_behaves_like 'working API - error'
       end
     end
     context 'while in standard WWW' do
-      subject { get '/-----------------force-err/text/html' }
-      context 'in production' do
-        before { expect(PuppetHerald).to receive(:in_dev?).and_return false }
-        it_behaves_like 'a proper 2xx - success'
-        it { expect(subject.content_type).to eq 'application/json' }
+      before :each do
+        expect_any_instance_of(PuppetHerald::App::LogicImpl).to receive(:app_html).and_raise :expected
+      end
+      subject { get '/app.html' }
+      context 'in production environment' do
+        before { PuppetHerald.environment = :production }
+        it_behaves_like '500 - error'
+        it { expect(subject.content_type).to include 'text/html' }
       end
 
-      context 'in dev' do
-        before { expect(PuppetHerald).to receive(:in_dev?).and_return true }
-        it { expect(subject).not_to be_ok }
+      context 'in dev environment' do
+        before { PuppetHerald.environment = :development }
+        it_behaves_like '500 - error'
         it { expect(subject.content_type).to include 'text/html' }
-        it { expect(subject.status).to eq 500 }
-        it { expect(subject.body).not_to be_empty }
       end
     end
   end

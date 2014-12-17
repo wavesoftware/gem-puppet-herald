@@ -21,8 +21,6 @@ group :development do
 end
 
 local_gemfile = File.join(File.dirname(__FILE__), 'Gemfile.local')
-if File.exist?(local_gemfile)
-  eval_gemfile local_gemfile
-end
+eval_gemfile local_gemfile if File.exist?(local_gemfile)
 
 # vim:ft=ruby

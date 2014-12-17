@@ -1,4 +1,6 @@
+# Migration
 class CreateLogEntries < ActiveRecord::Migration
+  # Migration
   def change
     create_table :log_entries do |t|
       t.datetime :time

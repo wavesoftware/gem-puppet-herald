@@ -1,67 +1,101 @@
 require 'fileutils'
 require 'logger'
 
+# A module for Herald
 module PuppetHerald
   # A class for a database configuration
   class Database
-    @@dbconn   = nil
-    @@passfile = nil
-    @@logger = Logger.new STDOUT
+    def initialize
+      @dbconn   = nil
+      @passfile = nil
+      @logger = Logger.new STDOUT
+    end
 
     # Gets a logger for database
     # @return [Logger] a logger
-    def self.logger
-      @@logger
-    end
+    attr_reader :logger
 
     # Sets a database connection
     # @return [String] a dbconnection string
-    def self.dbconn=(dbconn)
-      @@dbconn = dbconn
-    end
+    attr_writer :dbconn
 
     # Sets a passfile
     # @return [String] a password file
-    def self.passfile=(passfile)
-      @@passfile = passfile
-    end
+    attr_writer :passfile
 
     # Compiles a spec for database creation
     #
-    # @param echo [Boolean] should echo logs on screen?
+    # @param log [Boolean] should log on screen?
     # @return [Hash] a database configuration
-    def self.spec(echo = false)
-      return nil if @@dbconn.nil?
-      connection = {}
-      match = @@dbconn.match(/^(sqlite3?|postgres(?:ql)?):\/\/(.+)$/)
-      unless match
-        fail "Invalid database connection string given: #{@@dbconn}"
-      end
+    def spec(log = false)
+      connection = process_spec
+      print_config(connection, log)
+      connection
+    end
+
+    private
+
+    def process_spec
+      match = validate_conn(@dbconn)
       if %w(sqlite sqlite3).include? match[1]
-        dbname = match[2]
-        unless dbname.match /^(?:file:)?:mem/
-          dbname = File.expand_path(dbname)
-          FileUtils.touch dbname
-        end
-        connection[:adapter]  = 'sqlite3'
-        connection[:database] = dbname
+        connection = sqlite(match)
       else
-        db = URI.parse @@dbconn
-        dbname = db.path[1..-1]
-        connection[:adapter]  = db.scheme == 'postgres' ? 'postgresql' : db.scheme
-        connection[:host]     = db.host
-        connection[:port]     = db.port unless db.port.nil?
-        connection[:username] = db.user.nil? ? dbname : db.user
-        connection[:password] = File.read(@@passfile).strip
-        connection[:database] = dbname
-        connection[:encoding] = 'utf8'
-      end
-      if echo
-        copy = connection.dup
-        copy[:password] = '***' unless copy[:password].nil?
-        logger.info "Using #{copy.inspect} for database."
+        connection = postgresql(@dbconn, @passfile)
       end
       connection
+    end
+
+    def validate_conn(dbconn)
+      fail 'Connection is not set, can not validate database connection' if dbconn.nil?
+      match = dbconn.match(%r{^(sqlite3?|postgres(?:ql)?)://(.+)$})
+
+      fail "Invalid database connection string given: #{dbconn}" if match.nil?
+      match
+    end
+
+    def print_config(connection, log)
+      return unless log
+      copy = connection.dup
+      copy[:password] = '***' unless copy[:password].nil?
+      logger.info "Using #{copy.inspect} for database."
+    end
+
+    def sqlite(match)
+      connection = {}
+      dbname = match[2]
+      unless dbname.match(/^(?:file:)?:mem/)
+        dbname = File.expand_path(dbname)
+        FileUtils.touch dbname
+      end
+      connection[:adapter]  = 'sqlite3'
+      connection[:database] = dbname
+      connection
+    end
+
+    def postgresql(conn, passfile)
+      connection = {}
+      db = URI.parse conn
+      dbname = db.path[1..-1]
+      connection[:adapter]  = pgscheme(db.scheme)
+      connection[:host]     = db.host
+      connection[:username] = pguser(db.user, dbname)
+      connection[:password] = File.read(passfile).strip
+      connection[:database] = dbname
+      connection[:encoding] = 'utf8'
+      pgport(connection, db.port)
+      connection
+    end
+
+    def pgport(connection, port)
+      connection[:port] = port unless port.nil?
+    end
+
+    def pgscheme(scheme)
+      scheme == 'postgres' ? 'postgresql' : scheme
+    end
+
+    def pguser(user, dbname)
+      user.nil? ? dbname : user
     end
   end
 end

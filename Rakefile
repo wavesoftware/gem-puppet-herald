@@ -25,7 +25,7 @@ namespace :spec do
 end
 
 desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
-task :js do |t|
+task :js do
   FileUtils.rm_rf 'coverage/javascript'
   sh 'node_modules/karma/bin/karma start --browsers PhantomJS test/javascript/karma.conf.js'
   path = Pathname.glob('coverage/javascript/PhantomJS*/text.txt').first
@@ -34,16 +34,16 @@ task :js do |t|
 end
 
 tests = [
-  :rubocop,
   :'spec:all',
-  :js
+  :js,
+  :rubocop
 ]
 
 begin
   require 'inch/rake'
   Inch::Rake::Suggest.new :inch, '--pedantic'
   tests << :inch
-rescue LoadError
+rescue LoadError # rubocop:disable all
   # nothing here
 end
 
@@ -54,7 +54,6 @@ end
 
 namespace :rubocop do
   namespace :todo do
-
     desc 'Cleans a rubocop TODO list'
     task :clean do
       File.write('.rubocop_todo.yml', '')
@@ -66,7 +65,6 @@ namespace :rubocop do
       rcli = RuboCop::CLI.new
       rcli.run ['--auto-gen-config']
     end
-
   end
 end
 

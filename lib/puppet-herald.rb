@@ -1,28 +1,52 @@
 begin
   require 'pry'
-rescue LoadError
+rescue LoadError # rubocop:disable Lint/HandleExceptions
   # Do nothing here
 end
 
+require 'puppet-herald/database'
+
 # A module for Herald
 module PuppetHerald
-  @@root = File.dirname(File.dirname(File.realpath(__FILE__)))
+  @root = File.dirname(File.dirname(File.realpath(__FILE__)))
+  @database = PuppetHerald::Database.new
+
+  # A database object
+  # @return [PuppetHerald::Database] a database object
+  def self.database  # rubocop:disable Style/TrivialAccessors
+    @database
+  end
 
   # Calculates a replative directory inside the project
   #
   # @param dir [String] a sub directory
   # @return [String] a full path to replative dir
   def self.relative_dir(dir)
-    File.realpath(File.join @@root, dir)
+    File.realpath(File.join @root, dir)
+  end
+
+  def self.environment=(environment)
+    rackenv = :production
+    envsymbol = environment.to_s.to_sym
+    case envsymbol
+    when :dev, :development
+      rackenv = :development
+    when :test, :ci
+      rackenv = :test
+    else
+      rackenv = :production
+      envsymbol = :production
+    end
+    ENV['PUPPET_HERALD_ENV'] = envsymbol.to_s
+    ENV['RACK_ENV'] = rackenv.to_s
   end
 
   # Gets the environment set for Herald
   # @return [Symbol] an environment
   def self.environment
     env = :production
-    unless ENV['PUPPET_HERALD_ENV'].nil?
-      env = ENV['PUPPET_HERALD_ENV'].to_sym
-    end
+    env = ENV['PUPPET_HERALD_ENV'].to_sym unless ENV['PUPPET_HERALD_ENV'].nil?
+    ENV['RACK_ENV'] = env.to_s
     env
   end
 
