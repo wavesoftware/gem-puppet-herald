@@ -14,7 +14,7 @@ module PuppetHerald
   end
 
   # Version for Herald
-  VERSION     = version_prep '0.2.0.pre'
+  VERSION     = version_prep '0.2.0'
   # Lincense for Herald
   LICENSE     = 'Apache 2.0'
   # Project name
