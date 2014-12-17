@@ -37,8 +37,8 @@ describe PuppetHerald do
     describe '.environment' do
       it { subject::environment.should eq(:production) }
     end
-    describe '.is_in_prod?' do
-      it { subject.should be_is_in_prod }
+    describe '.in_prod?' do
+      it { subject.should be_in_prod }
     end
   end
 
@@ -49,8 +49,8 @@ describe PuppetHerald do
     describe '.environment' do
       it { subject::environment.should eq(:dev) }
     end
-    describe '.is_in_prod?' do
-      it { subject.should be_is_in_dev }
+    describe '.in_prod?' do
+      it { subject.should be_in_dev }
     end
   end
 end

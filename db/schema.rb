@@ -11,37 +11,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141211171326) do
-
+ActiveRecord::Schema.define(version: 20_141_211_171_326) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+  enable_extension 'plpgsql'
 
-  create_table "log_entries", force: true do |t|
-    t.datetime "time"
-    t.string   "level"
-    t.string   "source"
-    t.integer  "line"
-    t.text     "message"
-    t.integer  "report_id"
+  create_table 'log_entries', force: true do |t|
+    t.datetime 'time'
+    t.string 'level'
+    t.string 'source'
+    t.integer 'line'
+    t.text 'message'
+    t.integer 'report_id'
   end
 
-  create_table "nodes", force: true do |t|
-    t.string   "name"
-    t.string   "status"
-    t.integer  "no_of_reports"
-    t.datetime "last_run"
+  create_table 'nodes', force: true do |t|
+    t.string 'name'
+    t.string 'status'
+    t.integer 'no_of_reports'
+    t.datetime 'last_run'
   end
 
-  create_table "reports", force: true do |t|
-    t.string   "status"
-    t.string   "environment"
-    t.string   "transaction_uuid"
-    t.string   "configuration_version"
-    t.string   "puppet_version"
-    t.string   "kind"
-    t.string   "host"
-    t.datetime "time"
-    t.integer  "node_id"
+  create_table 'reports', force: true do |t|
+    t.string 'status'
+    t.string 'environment'
+    t.string 'transaction_uuid'
+    t.string 'configuration_version'
+    t.string 'puppet_version'
+    t.string 'kind'
+    t.string 'host'
+    t.datetime 'time'
+    t.integer 'node_id'
   end
-
 end

@@ -1,2 +1,2 @@
-require 'puppet-herald/app'
-run PuppetHerald::App
+require 'puppet-herald/application'
+run PuppetHerald::Application

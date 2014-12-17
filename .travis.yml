@@ -3,15 +3,15 @@ language: ruby
 bundler_args: --without development
 script:
   - bundle exec rake test
-  # - ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS test/javascript/karma.conf.js
 before_install: rm -f Gemfile.lock
 before_script:
   - npm install
-matrix:
-  fast_finish: true
-  include:
-  - rvm: 1.9.3
-  - rvm: 2.0.0
-  - rvm: 2.1.0
+rvm:
+  - 1.9.3
+  - 2.0.0
+  - 2.1.0
+env:
+  - PUPPET_HERALD_ENV=production
+  - PUPPET_HERALD_ENV=development
 notifications:
   email: false

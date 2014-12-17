@@ -1,6 +1,9 @@
 <div class="panel panel-primary" ng-controller="ReportController as ctrl">
   <!-- Default panel contents -->
-  <div class="panel-heading">Report for {{ ctrl.report.host }} <span class="badge">{{ ctrl.report.log_entries.length }}</span></div>
+  <div class="panel-heading">Report: 
+    <samp>{{ ctrl.report.configuration_version }}</samp>
+    <span class="badge">{{ ctrl.report.log_entries.length }}</span>
+  </div>
 
   <!-- Table -->
   <table class="table table-condensed table-hover herald-table-report">

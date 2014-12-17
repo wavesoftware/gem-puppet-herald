@@ -22,23 +22,18 @@ Herald is a puppet report processor. He provides a gateway for consuming puppet 
 Puppet module
 -----
 
-There is/will be a puppet module that handle installation and configuration of Herald and prerequisites. Check that out: https://github.com/wavesoftware/puppet-herald
+There is/will be a puppet module that handle installation and configuration of Herald and prerequisites. Installing configuring and running with puppet is recommended. If you decided to take that approch check out: https://github.com/wavesoftware/puppet-herald
 
-Prerequisites
------
+Installation, configuration and usage point seen below does not apply to installing with puppet!
 
- * `libpq-dev`
-
-On Ubuntu/Debian system install them with:
-
-```shell
-sudo apt-get install libpq-dev
-```
 
 Installation
 -----
 
-Install Herald and all dependencies from http://rubygems.org:
+Herald typically should be installed on the same node or in management network of your puppet master. It will listen by default to localhost (this can be changed by `--bind` option). You should take care to properlly secure Herald if its publicly avialable (SSL, Authorization, Access List, Firewalls etc.). This could be easily done with Apache web server. Is approch is taken in puppet module (see above).
+
+If you decided to install Herald by yourself, issue just:
+
 ```shell
 sudo gem install puppet-herald
 ```
@@ -46,13 +41,30 @@ sudo gem install puppet-herald
 Configuration
 -----
 
-If you like to use PostgreSQL database to hold reports, you will need to configure it. By default, Herald will use a sqlite file that he tries to create in your home directory. Check out `puppet-herald --help` for description.
+###PostgreSQL
+
+PostgreSQL is recommended database backend for Herald. If you like to use PostgreSQL database to hold reports, you will need to configure it. By default, Herald will use a sqlite file that he tries to create in your home directory. Check out `puppet-herald --help` for description.
+
+###Prerequisites for PostgreSQL
+
+ * `libpq-dev` system package
+ * `pg` gem package
+
+On Ubuntu/Debian system install them with:
+
+```shell
+sudo apt-get install libpq-dev
+sudo gem install pg
+```
 
 ###Create a database
 
-Just create a database for Herald (this is just a sample):
+Just create a database for Herald (this is just a sample for PostgreSQL):
+
 ```sql
-CREATE ROLE pherald LOGIN PASSWORD '<YOUR PASSWORD>' NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE NOREPLICATION;
+CREATE ROLE pherald LOGIN PASSWORD '<YOUR PASSWORD>'
+  NOSUPERUSER INHERIT NOCREATEDB
+  NOCREATEROLE NOREPLICATION;
 CREATE DATABASE "pherald" WITH OWNER = pherald
   ENCODING = 'UTF8'
   TABLESPACE = pg_default;
@@ -65,10 +77,134 @@ Usage
 $ puppet-herald --help
 ```
 
-Example of running a server with using sqlite and binding to other host and port:
+Example usage of Herald with defaults:
 
 ```shell
-puppet-herald --dbconn sqlite:///var/lib/puppet/reports/pherald.db --bind master.cluster.vm --port 8081
+puppet-herald # Navigate to http://localhost:11303/
+```
+
+Example usage of Herald with PostgreSQL and binding 127.0.1.1:
+
+```shell
+puppet-herald \
+  --dbconn postgresql://pherald@master.cluster.vm:5432/pherald \
+  --passfile /etc/pherald/passfile \
+  --bind 127.0.1.1 # Navigate to http://127.0.1.1:11303/
+```
+
+Example usage of Herald with SQLite3 and binding to other host and port:
+
+```shell
+puppet-herald \
+  --dbconn sqlite:///var/lib/puppet/reports/pherald.db \
+  --bind master.cluster.vm \
+  --port 8081 # Navigate to http://master.cluster.vm:8081/
+```
+
+Configuring puppet master
+-------------------------
+
+To send reports to Herald, you need to configure your puppet master to use custom report proccessor. This processor is also automatically configured if you choose to use a puppet module installation version. If not you must configure it by yourself.
+
+First install a puppet-herald gem if you didn't do it already on puppet master:
+
+```shell
+sudo gem install puppet-herald
+```
+
+If you are running PE, run instead:
+
+```shell
+sudo /opt/puppet/bin/gem install puppet-herald
+```
+
+Then create a file in your puppet module directory (you can get modulepath with command: `puppet config print modulepath`). For example: `<puppet modules>/herald/lib/puppet/reports/herald.rb` with contents:
+
+```ruby
+require 'puppet'
+require 'puppet-herald/client'
+
+Puppet::Reports.register_report(:herald) do
+  desc "Process reports via the Herald API."
+  def process
+    PuppetHerald::Client.new.process(self)
+  end
+end
+```
+
+If you need to post to other host or port use (defaults are: `localhost` and `11303`):
+
+```ruby
+require 'puppet'
+require 'puppet-herald/client'
+
+Puppet::Reports.register_report(:herald) do
+  desc "Process reports via the Herald API."
+  def process
+    PuppetHerald::Client.new('master.secure.vm', 8082).process(self)
+  end
+end
+```
+
+Then edit your `puppet.conf` file and set `herald` as your report processor in section `main`:
+
+```ini
+[main]
+   reports = puppetdb,herald
+```
+
+###Testing a ruby code
+
+There are two types of tests distributed with the module. Unit tests and integration tests that uses sqlite as database backend in memory.
+
+For unit testing, make sure you have:
+
+ * rake
+ * bundler
+
+Install the necessary gems (gems will be downloaded to private .vendor directory):
+
+```shell
+bundle install --path .vendor
+```
+
+And then run the unit tests (for integration tests simply swap `unit` to `integration`):
+
+```shell
+bundle exec rake spec:unit
+```
+
+You can run single test with:
+
+```shell
+bundle exec rspec spec/unit/puppet-herald/version_spec.rb
+```
+
+You can also run all test with `test` target
+
+###Testing a javascript code
+
+To test javascript code, make sure you have:
+
+ * nodejs
+
+If so, issue this command to bootstart testing environment:
+
+```shell
+npm install
+```
+
+And then test Javascript code with:
+
+```shell
+bundle exec rake js
+```
+
+Check your code for quality with:
+
+```shell
+bundle exec rake rucocop
+bundle exec rake inch
 ```
 
 ###Contributing

@@ -1,6 +1,8 @@
 <div class="panel panel-primary" ng-controller="NodeController as ctrl">
   <!-- Default panel contents -->
-  <div class="panel-heading">Reports for {{ ctrl.node.name }} <span class="badge">{{ ctrl.node.reports.length }}</span></div>
+  <div class="panel-heading">Reports for 
+    <samp>{{ ctrl.node.name }}</samp> <span class="badge">{{ ctrl.node.reports.length }}</span>
+  </div>
 
   <!-- Table -->
   <table class="table table-striped table-hover">
