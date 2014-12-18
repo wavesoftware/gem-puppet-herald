@@ -60,6 +60,10 @@ module PuppetHerald
             log = LogEntry.new
             attr_to_copy = %w(level message source time)
             copy_attrs in_log, log, attr_to_copy
+            if log.message.include? '(noop)' and report.status != 'failed'
+              report.status = 'pending'
+              parsed.status = 'pending'
+            end
             log.report = report
             report.log_entries << log
           end
