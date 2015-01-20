@@ -23,3 +23,5 @@
 /node_modules
 /npm-*.log
 /Gemfile.local
+/lib/puppet-herald/public/bower_components
+/test/javascript/bower_components

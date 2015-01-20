@@ -1,7 +1,6 @@
 ENV['RACK_ENV'] = 'test'
 
-require 'support/reconnectdb'
-require 'spec_helper'
+require 'model_helper'
 require 'rspec'
 require 'rack/test'
 
@@ -26,6 +25,12 @@ shared_examples '500 - error' do
   it { expect(subject.body).not_to be_empty }
 end
 
+shared_examples '400 - bad request' do
+  it { expect(subject).not_to be_successful }
+  it { expect(subject).to be_client_error }
+  it { expect(subject.status).to eq 400 }
+  it { expect(subject.body).not_to be_empty }
+end
 shared_examples '404 - not found' do
   it { expect(subject).not_to be_successful }
   it { expect(subject).to be_client_error }
@@ -41,6 +46,10 @@ end
 shared_examples "working API - not found" do
   it { expect(subject.content_type).to eq 'application/json' }
   it_behaves_like '404 - not found'
+end
+shared_examples "working API - bad request" do
+  it { expect(subject.content_type).to eq 'application/json' }
+  it_behaves_like '400 - bad request'
 end
 
 shared_examples "working API - error" do
@@ -152,19 +161,116 @@ describe 'The Herald App' do
 
     before :each do
       reconnectdb
+      fixtures :nodes
+      fixtures :reports
     end
     describe "post '/api/v1/reports'" do
       let(:yaml) { File.read(File.expand_path("../fixtures/changed-notify.yaml", __FILE__)) }
       subject { post '/api/v1/reports', yaml }
       it_behaves_like 'working API - success'
     end
-    describe "get '/api/v1/nodes'" do
-      subject { get '/api/v1/nodes' }
-      it_behaves_like 'working API - success'
+    context 'without pagination' do
+      describe "get '/api/v1/nodes'" do
+        subject { get '/api/v1/nodes' }
+        let(:json) { JSON.parse subject.body }
+        it_behaves_like 'working API - success'
+        it { expect(json.size).to be(2) }
+      end
+      describe "get '/api/v1/nodes/1'" do
+        subject { get '/api/v1/nodes/1' }
+        let(:json) { JSON.parse subject.body }
+        it_behaves_like 'working API - success'
+        it { expect(json['reports'].class).to be(Array) }
+        it { expect(json['reports'].size).to be(5) }
+      end
+      describe "get '/api/v1/nodes/12'" do
+        subject { get '/api/v1/nodes/12' }
+        it_behaves_like 'working API - not found'
+      end
     end
-    describe "get '/api/v1/nodes/1'" do
-      subject { get '/api/v1/nodes/1' }
-      it_behaves_like 'working API - not found'
+    context 'with pagination given' do
+      let(:compile_headers) do
+        lambda do |pag|
+          api = PuppetHerald::App::ApiImplV1.new(nil)
+          api.send(:headers, pag, true)
+        end
+      end
+      context 'with page 1 and limit 10' do
+        let(:headers) { compile_headers.call(PuppetHerald::Models::Pagination.new(1, 10)) }
+        describe "get '/api/v1/nodes'" do
+          subject { get('/api/v1/nodes', {}, headers) }
+          let(:json) { JSON.parse subject.body }
+          it_behaves_like 'working API - success'
+          it { expect(json.size).to be(2) }
+          it { expect(json[0]['no_of_reports']).to eq(5) }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:page] => '1') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:limit] => '10') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:total] => '2') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:pages] => '1') }
+        end
+        describe "get '/api/v1/nodes/1'" do
+          subject { get('/api/v1/nodes/1', {}, headers) }
+          let(:json) { JSON.parse subject.body }
+          it_behaves_like 'working API - success'
+          it { expect(json['reports'].class).to be(Array) }
+          it { expect(json['reports'].size).to be(5) }
+          it { expect(json['no_of_reports']).to eq(5) }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:page] => '1') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:limit] => '10') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:total] => '5') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:pages] => '1') }
+        end
+      end
+      context 'with page 2 and limit 1' do
+        let(:headers) { compile_headers.call(PuppetHerald::Models::Pagination.new(2, 1)) }
+        describe "get '/api/v1/nodes'" do
+          subject { get('/api/v1/nodes', {}, headers) }
+          let(:json) { JSON.parse subject.body }
+          it_behaves_like 'working API - success'
+          it { expect(json.size).to be(1) }
+          it { expect(json[0]['name']).to eq('slave1.vm') }
+          it { expect(json[0]['no_of_reports']).to eq(0) }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:page] => '2') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:limit] => '1') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:total] => '2') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:pages] => '2') }
+        end
+        describe "get '/api/v1/nodes/1'" do
+          subject { get('/api/v1/nodes/1', {}, headers) }
+          let(:json) { JSON.parse subject.body }
+          it_behaves_like 'working API - success'
+          it { expect(json['reports'].class).to be(Array) }
+          it { expect(json['reports'].size).to be(1) }
+          it { expect(json['no_of_reports']).to eq(5) }
+          it { expect(json['reports'][0]['configuration_version']).to eq('12345721') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:page] => '2') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:limit] => '1') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:total] => '5') }
+          it { expect(subject.headers).to include(PuppetHerald::Models::Pagination::KEYS[:pages] => '5') }
+        end
+      end
+      context 'with page -12 and limit 2' do
+        let(:headers) do
+          api = PuppetHerald::App::ApiImplV1.new(nil)
+          httpize = lambda {|name| api.send(:httpize, name) }
+          {
+            httpize.call(PuppetHerald::Models::Pagination::KEYS[:page])  => '-12',
+            httpize.call(PuppetHerald::Models::Pagination::KEYS[:limit]) => '2'
+          }
+        end
+        describe "get '/api/v1/nodes'" do
+          subject { get('/api/v1/nodes', {}, headers) }
+          let(:json) { JSON.parse subject.body }
+          it_behaves_like 'working API - bad request'
+          it { expect(json['error']).to eq('ArgumentError: Invalid value for pagination page "-12"') }
+        end
+        describe "get '/api/v1/nodes/1'" do
+          subject { get('/api/v1/nodes/1', {}, headers) }
+          let(:json) { JSON.parse subject.body }
+          it_behaves_like 'working API - bad request'
+          it { expect(json['error']).to eq('ArgumentError: Invalid value for pagination page "-12"') }
+        end
+      end
     end
     describe "get '/api/v1/reports/1'" do
       subject { get '/api/v1/reports/1' }

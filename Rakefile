@@ -4,6 +4,24 @@ require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 require 'rubocop'
 require 'fileutils'
+require 'rainbow'
+
+def verify_js_coverage(line_expected = 0.9, branch_expected = 0.9)
+  require 'ox'
+  f = File.open 'coverage/javascript/cobertura.xml'
+  xml = Ox.parse f.read
+  attrs = xml.root.attributes
+  if attrs[:'line-rate'].to_f < line_expected
+    $stderr.puts Rainbow("\nLine coverage is #{attrs[:'line-rate'].to_f * 100}%, " \
+      "that don't meet minimum requirements of #{line_expected * 100}%. Write more tests!\n").red.bright
+    exit! 2
+  end
+  if attrs[:'branch-rate'].to_f < branch_expected
+    $stderr.puts Rainbow("\nBranch coverage is #{attrs[:'branch-rate'].to_f * 100}%, " \
+      "that don't meet minimum requirements of #{branch_expected * 100}%. Write more tests!\n").red.bright
+    exit! 3
+  end
+end
 
 namespace :spec do
   desc 'Run all spec tests at once.'
@@ -24,18 +42,36 @@ namespace :spec do
   end
 end
 
-desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
-task :js do
-  FileUtils.rm_rf 'coverage/javascript'
-  sh 'node_modules/karma/bin/karma start --browsers PhantomJS test/javascript/karma.conf.js'
-  path = Pathname.glob('coverage/javascript/PhantomJS*/text.txt').first
-  puts 'Coverage for Javascript:'
-  puts File.read(path)
+namespace :js do
+  desc 'Install NPM dependencies'
+  task :install do
+    sh 'npm install'
+  end
+  task :bower_standalone do
+    Dir.chdir 'lib/puppet-herald/public' do
+      sh 'bower install -p'
+    end
+    Dir.chdir 'test/javascript' do
+      sh 'bower install'
+    end
+  end
+  task :test_standalone do
+    FileUtils.rm_rf 'coverage/javascript'
+    sh 'node_modules/karma/bin/karma start --browsers PhantomJS test/javascript/karma.conf.js'
+    path = Pathname.glob('coverage/javascript/text.txt').first
+    puts Rainbow("\nCoverage for Javascript:\n").blue
+    puts File.read(path)
+    verify_js_coverage
+  end
+  desc 'Install bower JS dependencies.'
+  task bower: [:'js:install', :'js:bower_standalone']
+  desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
+  task test: [:'js:install', :'js:bower', :'js:test_standalone']
 end
 
 tests = [
   :'spec:all',
-  :js,
+  :'js:test',
   :rubocop
 ]
 
@@ -70,5 +106,16 @@ end
 
 desc 'Run lint, and all spec tests.'
 task test: tests
+
+desc 'Installs all dependencies.'
+task install: [:'js:install', :'js:bower']
+
+desc 'Build a gem package.'
+task :gem do
+  sh 'gem build puppet-herald.gemspec'
+end
+
+desc 'Builds, and test package'
+task build: [:install, :test, :gem]
 
 task default: :test

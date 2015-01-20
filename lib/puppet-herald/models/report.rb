@@ -15,7 +15,7 @@ module PuppetHerald
         # Gets a report with prefetched log entries
         # @param id [Integer] a in of report to get
         # @return [Report, nil] fetched report or nil
-        def get_with_log_entries(id)
+        def with_log_entries(id)
           Report.joins(:log_entries).includes(:log_entries).find_by_id(id)
         end
 
@@ -42,11 +42,9 @@ module PuppetHerald
           if node.nil?
             node = Node.new
             node.name = parsed.host
-            node.no_of_reports = 0
           end
           report.node = node
           node.reports << report
-          node.no_of_reports += 1
           node.status = parsed.status
           node.last_run = parsed.time
           node

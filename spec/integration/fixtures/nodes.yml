@@ -1,0 +1,13 @@
+---
+
+master:
+  id: 1
+  name: 'master.vm'
+  status: 'changed'
+  last_run: '2014-12-17T17:34:08'
+
+slave1:
+  id: 2
+  name: 'slave1.vm'
+  status: 'unchanged'
+  last_run: '2014-12-17T16:32:18'

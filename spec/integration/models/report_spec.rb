@@ -37,12 +37,12 @@ describe PuppetHerald::Models::Report, ".create_from_yaml", :rollback => true do
   end
 end
 
-describe PuppetHerald::Models::Report, '.get_with_log_entries', :rollback => true do
+describe PuppetHerald::Models::Report, '.with_log_entries', :rollback => true do
   let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
   let(:id)   { PuppetHerald::Models::Report.create_from_yaml(yaml).id }
 
   context 'fetching an existing report' do
-    subject { PuppetHerald::Models::Report.get_with_log_entries id }
+    subject { PuppetHerald::Models::Report.with_log_entries id }
     
     it "should return value that isn't nil" do
       subject.should_not be_nil

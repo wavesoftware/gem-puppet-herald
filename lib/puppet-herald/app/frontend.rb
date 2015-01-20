@@ -22,7 +22,7 @@ module PuppetHerald
           minified = ''
           files = @js.files
         end
-        [minified, files]
+        [minified, files, @js.main_deps]
       end
       # Uglify an application JS's into one minified JS file
       # @param mapname [String] name of source map to be put into uglified JS
@@ -46,7 +46,7 @@ module PuppetHerald
 
       get '/app.html' do
         cache_control :public, :must_revalidate, max_age: 60 if PuppetHerald.in_prod?
-        @minified, @files = settings.logic.app_html
+        @minified, @files, @deps = settings.logic.app_html
         erb :app
       end
 

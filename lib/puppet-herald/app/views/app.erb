@@ -27,13 +27,12 @@
       </address>
     </section>
 
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular<%= @minified %>.js"></script>
-    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular-route<%= @minified %>.js"></script>
-    <script src="//cdn.jsdelivr.net/momentjs/2.8.4/moment.min.js"></script>
-    <script src="//cdn.jsdelivr.net/angular.moment/0.8.3/angular-moment<%= @minified %>.js"></script>
+    <!-- Automatic includes of project dependencies -->
+    <% @deps.each do |file| %>
+    <script type="text/javascript" src="<%= file %>"></script><% end %>
 
-    <!-- Automatic incudes of project files -->
+    <!-- Automatic includes of project files -->
     <% @files.each do |file| %>
-    <script src="<%= file %>"></script><% end %>
+    <script type="text/javascript" src="<%= file %>"></script><% end %>
   </body>
 </html>

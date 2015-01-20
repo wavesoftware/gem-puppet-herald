@@ -1,4 +1,5 @@
 require 'support/reconnectdb'
+require 'support/fixtures'
 
 reconnectdb
 
