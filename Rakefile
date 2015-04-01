@@ -6,21 +6,19 @@ require 'rubocop'
 require 'fileutils'
 require 'rainbow'
 
-def verify_js_coverage(line_expected = 0.9, branch_expected = 0.9)
+def cobertura_attrs
   require 'ox'
   f = File.open 'coverage/javascript/cobertura.xml'
-  xml = Ox.parse f.read
-  attrs = xml.root.attributes
-  if attrs[:'line-rate'].to_f < line_expected
-    $stderr.puts Rainbow("\nLine coverage is #{attrs[:'line-rate'].to_f * 100}%, " \
-      "that don't meet minimum requirements of #{line_expected * 100}%. Write more tests!\n").red.bright
-    exit! 2
-  end
-  if attrs[:'branch-rate'].to_f < branch_expected
-    $stderr.puts Rainbow("\nBranch coverage is #{attrs[:'branch-rate'].to_f * 100}%, " \
-      "that don't meet minimum requirements of #{branch_expected * 100}%. Write more tests!\n").red.bright
-    exit! 3
-  end
+  Ox.parse(f.read).root.attributes
+end
+
+def verify_js_coverage(line_expected = 0.99, branch_expected = 0.9)
+  attrs = cobertura_attrs
+  fail "Line coverage is #{attrs[:'line-rate'].to_f * 100}%, " \
+    "that don't meet minimum requirements of #{line_expected * 100}%." if attrs[:'line-rate'].to_f < line_expected
+
+  fail "Branch coverage is #{attrs[:'branch-rate'].to_f * 100}%, " \
+    "that don't meet minimum requirements of #{branch_expected * 100}%." if attrs[:'branch-rate'].to_f < branch_expected
 end
 
 namespace :spec do
@@ -61,7 +59,12 @@ namespace :js do
     path = Pathname.glob('coverage/javascript/text.txt').first
     puts Rainbow("\nCoverage for Javascript:\n").blue
     puts File.read(path)
-    verify_js_coverage
+    begin
+      verify_js_coverage
+    rescue StandardError => ex
+      $stderr.puts Rainbow("\n#{ex.message} Write more tests!\n").red.bright
+      exit 2
+    end
   end
   desc 'Install bower JS dependencies.'
   task bower: [:'js:install', :'js:bower_standalone']

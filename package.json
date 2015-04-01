@@ -33,7 +33,7 @@
     "herald"
   ],
   "author": "Krzysztof Suszynski",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/wavesoftware/gem-puppet-herald/issues"
   },

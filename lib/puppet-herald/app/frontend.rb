@@ -22,7 +22,7 @@ module PuppetHerald
           minified = ''
           files = @js.files
         end
-        [minified, files, @js.main_deps]
+        [minified, files, []]
       end
       # Uglify an application JS's into one minified JS file
       # @param mapname [String] name of source map to be put into uglified JS
