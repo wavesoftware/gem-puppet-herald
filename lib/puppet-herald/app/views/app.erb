@@ -8,9 +8,9 @@
     <meta name="description" content="Herald - a Puppet report processor">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap<%= @minified %>.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap<%= @minified %>.css">
     <!-- Optional theme -->
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme<%= @minified %>.css">
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme<%= @minified %>.css">
     <link rel="stylesheet" href="css/herald.css">
   </head>
   <body>
@@ -27,9 +27,13 @@
       </address>
     </section>
 
-    <!-- Automatic includes of project dependencies -->
-    <% @deps.each do |file| %>
-    <script type="text/javascript" src="<%= file %>"></script><% end %>
+    <script type="text/javascript" src="bower_components/angular/angular<%= @minified %>.js"></script>
+    <script type="text/javascript" src="bower_components/angular-route/angular-route<%= @minified %>.js"></script>
+    <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-moment/angular-moment<%= @minified %>.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular<%= @minified %>.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular<%= @minified %>.js"></script>
+
 
     <!-- Automatic includes of project files -->
     <% @files.each do |file| %>

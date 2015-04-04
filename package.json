@@ -1,6 +1,6 @@
 {
   "name": "puppet-herald",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports.",
   "main": "lib/puppet-herald/public/app.js",
   "directories": {

@@ -22,10 +22,6 @@ module PuppetHerald
       @files
     end
 
-    # def deps
-
-    # end
-
     # Uglify an application JS's into one minified JS file
     # @param mapname [String] name of source map to be put into uglified JS
     # @return [Hash] a hash with uglified JS and source map

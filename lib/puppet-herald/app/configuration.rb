@@ -46,6 +46,8 @@ module PuppetHerald
             ActiveRecord::Base.logger.level = Logger::WARN
           end
           nil
+        rescue
+          nil
         end
       end
 

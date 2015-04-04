@@ -23,8 +23,8 @@ describe('herald.node module', function() {
       it('page is 1', function() {
          expect(subject.page()).toBe(1);
       });
-      it('limit is 5', function() {
-         expect(subject.limit()).toBe(5);
+      it('limit is 20', function() {
+         expect(subject.limit()).toBe(20);
       });
     });
 
