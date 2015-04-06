@@ -13,7 +13,7 @@ group :test do
   gem 'rubocop',            '~> 0.29.0',  require: false
   gem 'rspec-activerecord', '~> 0.0.2',   require: false
   gem 'ox',                 '~> 2.1.0',   require: false
-  gem 'jshint',             '~> 1.3.0',   require: false
+  gem 'jshintrb',           '~> 0.3.0',   require: false
 end
 
 group :development do

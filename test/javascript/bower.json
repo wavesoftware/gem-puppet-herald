@@ -8,8 +8,9 @@
   "dependencies": {
     "angular": "1.3.x",
     "angular-route": "1.3.x",
-    "angular-moment": "0.8.x",
-    "bootstrap": "3.3.x"
+    "angular-moment": "0.9.x",
+    "bootstrap": "3.3.x",
+    "angular-ui-bootstrap": "0.12.x"
   },
   "devDependencies": {
     "angular-loader": "1.3.x",

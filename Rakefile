@@ -1,4 +1,4 @@
-
+require 'jshintrb/jshinttask'
 require 'sinatra/activerecord/rake'
 require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
@@ -66,15 +66,20 @@ namespace :js do
       exit 2
     end
   end
+  Jshintrb::JshintTask.new :hint do |t|
+    t.pattern = 'lib/puppet-herald/public/**/*.js'
+    t.exclude_pattern = 'lib/puppet-herald/public/bower_components/**/*'
+    t.options = :jshintrc
+  end
   desc 'Install bower JS dependencies.'
   task bower: [:'js:install', :'js:bower_standalone']
   desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
-  task test: [:'js:install', :'js:bower', :'js:test_standalone']
+  task test: [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
 end
 
 tests = [
-  :'spec:all',
   :'js:test',
+  :'spec:all',
   :rubocop
 ]
 
