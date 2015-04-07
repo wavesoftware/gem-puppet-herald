@@ -12,7 +12,7 @@ def cobertura_attrs
   Ox.parse(f.read).root.attributes
 end
 
-def verify_js_coverage(line_expected = 0.99, branch_expected = 0.9)
+def verify_js_coverage(line_expected = 0.9, branch_expected = 0.9)
   attrs = cobertura_attrs
   fail "Line coverage is #{attrs[:'line-rate'].to_f * 100}%, " \
     "that don't meet minimum requirements of #{line_expected * 100}%." if attrs[:'line-rate'].to_f < line_expected

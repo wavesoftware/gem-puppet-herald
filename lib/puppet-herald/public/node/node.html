@@ -1,7 +1,9 @@
-<div class="panel panel-primary" ng-controller="NodeController as ctrl">
+<div ng-controller="NodeController as ctrl">
+
+<div class="panel panel-primary">
   <!-- Default panel contents -->
   <div class="panel-heading">Reports for 
-    <samp>{{ ctrl.node.name }}</samp> <span class="badge">{{ ctrl.node.reports.length }}</span>
+    <samp>{{ ctrl.node.name }}</samp> <span class="badge">{{ ctrl.pagination.elements() }}</span>
   </div>
 
   <!-- Table -->
@@ -16,7 +18,9 @@
       </tr>
     </thead>
     <tbody>
-      <tr ng-repeat="report in ctrl.node.reports | orderBy:'-time'">
+      <tr 
+        dir-paginate="report in ctrl.node.reports | itemsPerPage: ctrl.pagination.limit() | orderBy: '-time'"
+        total-items="ctrl.pagination.elements()">
         <td>{{ $index + 1 }}</td>
         <td>{{ report.configuration_version }}</td>
         <td><ng-status-button 
@@ -29,4 +33,13 @@
       </tr>
     </tbody>
   </table>
+</div>
+
+<nav class="text-center">
+  <dir-pagination-controls
+    on-page-change="ctrl.onPageChange(newPageNumber)"
+    boundary-links="true"
+    ></dir-pagination-controls>
+</nav>
+
 </div>
