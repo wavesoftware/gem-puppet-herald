@@ -77,6 +77,25 @@ namespace :js do
   task test: [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
 end
 
+namespace :console do
+  desc 'Start a console with loaded ActiveRecord models on dev database'
+  task :db do
+    require 'pry'
+    require 'puppet-herald'
+    PuppetHerald.environment = :dev
+    home = File.expand_path('~')
+    defaultdb     = "sqlite://#{home}/pherald.db"
+    defaultdbpass = "#{home}/.pherald.pass"
+    PuppetHerald.database.dbconn   = defaultdb
+    PuppetHerald.database.passfile = defaultdbpass
+    PuppetHerald.database.spec
+    require 'puppet-herald/app/configuration'
+    PuppetHerald::App::Configuration.dbmigrate!
+    require 'puppet-herald/models/node'
+    pry
+  end
+end
+
 tests = [
   :'js:test',
   :'spec:all',

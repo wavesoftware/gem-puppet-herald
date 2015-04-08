@@ -31,6 +31,15 @@ module PuppetHerald
         PuppetHerald::Models::Report.where(node_id: id).count
       end
 
+      # Deletes nodes that doesn't have reports
+      #
+      # @return [Integer] number of empty node deleted
+      def self.delete_empty
+        joins('LEFT JOIN "reports" ON "reports"."node_id" = "nodes"."id"')
+          .where('"reports"."node_id" IS NULL')
+          .delete_all
+      end
+
       # Gets a node with prefetched reports
       #
       # @param id [Integer] a in of node to get

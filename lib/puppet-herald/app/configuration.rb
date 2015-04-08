@@ -40,13 +40,12 @@ module PuppetHerald
         #
         # @return [nil]
         def setup_database_logger
+          ActiveRecord::Base.logger = Logger.new(STDOUT) if ActiveRecord::Base.logger.nil?
           if PuppetHerald.in_dev?
             ActiveRecord::Base.logger.level = Logger::DEBUG
           else
             ActiveRecord::Base.logger.level = Logger::WARN
           end
-          nil
-        rescue
           nil
         end
       end
