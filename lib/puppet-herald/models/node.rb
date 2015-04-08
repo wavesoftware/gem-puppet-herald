@@ -47,7 +47,7 @@ module PuppetHerald
       # @return [Node[]] nodes
       def self.paginate(pagination)
         pagination.total = count
-        order(:id).limit(pagination.limit).offset(pagination.offset)
+        order(last_run: :desc).limit(pagination.limit).offset(pagination.offset)
       end
     end
   end

@@ -2,6 +2,7 @@ require 'model_helper'
 require 'puppet-herald/models/report'
 require 'puppet-herald/models/log-entry'
 require 'puppet-herald/models/node'
+require 'puppet-herald/models'
 
 describe PuppetHerald::Models::Node, '.with_reports', :rollback => true do
   let(:yaml) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
@@ -21,6 +22,14 @@ describe PuppetHerald::Models::Node, '.with_reports', :rollback => true do
     end
     it "should have status 'changed'" do
       subject.status.should eq('changed')
+    end
+  end
+
+  context 'paginating nodes' do
+    let(:pagination) { PuppetHerald::Models::Pagination.new(1, 10) }
+    subject { PuppetHerald::Models::Node.paginate(pagination) }
+    it "should return value that isn't nil" do
+      expect(subject).to_not be_nil
     end
   end
 end

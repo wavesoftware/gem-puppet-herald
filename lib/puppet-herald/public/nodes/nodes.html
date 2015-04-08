@@ -17,7 +17,7 @@
     </thead>
     <tbody>
       <tr
-        dir-paginate="node in ctrl.all | itemsPerPage: ctrl.pagination.limit() | orderBy:'last_run'"
+        dir-paginate="node in ctrl.all | itemsPerPage: ctrl.pagination.limit() | orderBy:'-last_run'"
         total-items="ctrl.pagination.elements()"
         >
         <td>{{ $index + 1 }}</td>
