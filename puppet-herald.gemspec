@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'sinatra',              '~> 1.4', '>= 1.4.0'
   gem.add_runtime_dependency 'sinatra-contrib',      '~> 1.4', '>= 1.4.0'
   gem.add_runtime_dependency 'sinatra-activerecord', '~> 2.0', '>= 2.0.0'
+  gem.add_runtime_dependency 'rufus-scheduler',      '~> 3.0', '>= 3.0.0'
   gem.add_runtime_dependency 'micro-optparse',       '~> 1.2', '>= 1.2.0'
   gem.add_runtime_dependency 'uglifier',             '~> 2.7', '>= 2.7.0'
 end

@@ -90,7 +90,7 @@ namespace :console do
     PuppetHerald.database.passfile = defaultdbpass
     PuppetHerald.database.spec
     require 'puppet-herald/app/configuration'
-    PuppetHerald::App::Configuration.dbmigrate!
+    PuppetHerald::App::Configuration.configure_app(cron: false)
     require 'puppet-herald/models/node'
     pry
   end

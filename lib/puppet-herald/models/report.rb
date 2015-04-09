@@ -1,6 +1,7 @@
 require 'puppet-herald/models/log-entry'
 require 'puppet-herald/models/node'
 require 'puppet-herald/stubs/puppet'
+require 'sinatra/activerecord'
 
 # A module for Herald
 module PuppetHerald
@@ -44,8 +45,10 @@ module PuppetHerald
         # @return [Integer] number of
         def purge_older_then(date)
           deleted = 0
+          query = ['"reports"."time" < ?', date]
+          return 0 if where(query).count == 0
           transaction do
-            idss = joins(:log_entries).where(['"reports"."time" < ?', date]).collect(&:id).uniq
+            idss = joins(:log_entries).where(query).collect(&:id).uniq
             PuppetHerald::Models::LogEntry.where(['"report_id" IN (?)', idss]).delete_all unless idss.empty?
             where(['"id" IN (?)', idss]).delete_all unless idss.empty?
             PuppetHerald::Models::Node.delete_empty

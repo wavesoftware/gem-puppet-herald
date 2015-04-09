@@ -14,8 +14,8 @@ context 'With silenced loggers' do
   let(:cli) { TestCLI.new }
 
   before :each do
-    cli.logger.level = 100
-    cli.errlogger.level = 100
+    PuppetHerald.logger.level = 100
+    PuppetHerald.errlogger.level = 100
     PuppetHerald::database::logger.level = 100
     PuppetHerald::database::dbconn = nil
     allow(FileUtils).to receive(:touch)

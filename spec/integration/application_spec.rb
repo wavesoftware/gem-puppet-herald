@@ -60,7 +60,9 @@ end
 describe 'The Herald App' do
   include Rack::Test::Methods
 
-  before(:all) { reconnectdb }
+  before(:all) do
+    reconnectdb
+  end
 
   def app
     require 'puppet-herald/application'
@@ -68,6 +70,17 @@ describe 'The Herald App' do
   end
 
   describe "on '/' redirects to '/app.html'" do
+    level = nil
+    before(:all) do
+      require 'puppet-herald/app/configuration'
+      level = PuppetHerald.logger.level
+      PuppetHerald.logger.level = 100
+      PuppetHerald::App::Configuration.configure_app(dbmigrate: false)
+    end
+    after(:all) do
+      app.quit!
+      PuppetHerald.logger.level = level
+    end
     it_behaves_like 'a redirect to app.html' do
       subject { get '/' }
     end
