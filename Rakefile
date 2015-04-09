@@ -71,10 +71,16 @@ namespace :js do
     t.exclude_pattern = 'lib/puppet-herald/public/bower_components/**/*'
     t.options = :jshintrc
   end
+  task :coveralls do
+    sh './node_modules/coveralls/bin/coveralls.js < ./coverage/javascript/lcov/lcov.info'
+  end
+  test_tasks = [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
+  test_tasks << :coveralls if ENV['TRAVIS']
+
   desc 'Install bower JS dependencies.'
   task bower: [:'js:install', :'js:bower_standalone']
   desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
-  task test: [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
+  task test: test_tasks
 end
 
 namespace :console do
