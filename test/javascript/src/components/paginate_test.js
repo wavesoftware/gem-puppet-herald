@@ -168,5 +168,16 @@ describe('herald.node module', function() {
       });
     });
 
+    describe('createPageCache()', function() {
+      var cache;
+      beforeEach(function() {
+        cache = PaginationFactory.createPageCache(10);
+      });
+
+      it('return `undefined` for never loaded page', function() {
+        expect(cache.get(1)).toBeUndefined();
+      });
+    });
+
   });
 });

@@ -15,7 +15,7 @@ describe PuppetHerald::App::Configuration do
         expect(subject).to be_nil
       end
       it 'sets logger level to DEBUG' do
-        expect(ActiveRecord::Base.logger.level).to be(Logger::DEBUG)
+        expect(ActiveRecord::Base.logger.level).to eq(Logger::DEBUG)
       end
     end
     context 'in PROD environment' do
@@ -25,8 +25,8 @@ describe PuppetHerald::App::Configuration do
       it 'executes properlly' do
         expect(subject).to be_nil
       end
-      it 'sets logger level to WARN' do
-        expect(ActiveRecord::Base.logger.level).to be(Logger::WARN)
+      it 'sets logger level to INFO' do
+        expect(ActiveRecord::Base.logger.level).to eq(Logger::INFO)
       end
     end
   end

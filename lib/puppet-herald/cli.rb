@@ -18,7 +18,7 @@ module PuppetHerald
     # @param argv [Array] an argv from CLI
     # @return [Integer] a status code for program
     def run!(argv = ARGV)
-      PuppetHerald.environment
+      PuppetHerald.rackenv
 
       options = parse_or_kill argv, 2
       run_or_kill options, 1
@@ -33,7 +33,7 @@ module PuppetHerald
     def parse(argv)
       options = parser.process!(argv)
 
-      msg = "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} in #{PuppetHerald.environment}..."
+      msg = "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} in #{PuppetHerald.rackenv}..."
       PuppetHerald.logger.info msg
       PuppetHerald.database.dbconn   = options[:dbconn]
       PuppetHerald.database.passfile = options[:passfile]

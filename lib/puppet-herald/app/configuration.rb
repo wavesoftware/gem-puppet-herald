@@ -2,7 +2,6 @@ require 'logger'
 require 'sinatra/base'
 require 'sinatra/namespace'
 require 'sinatra/activerecord'
-require 'sinatra/reloader'
 require 'puppet-herald'
 require 'puppet-herald/javascript'
 require 'puppet-herald/purgecronjob'
@@ -81,21 +80,13 @@ module PuppetHerald
         #
         # @return [nil]
         def setup_database_logger
-          ActiveRecord::Base.logger = PuppetHerald.logger if ActiveRecord::Base.logger.nil?
-          if PuppetHerald.in_dev?
-            ActiveRecord::Base.logger.level = Logger::DEBUG
-          else
-            ActiveRecord::Base.logger.level = Logger::WARN
-          end
+          ActiveRecord::Base.logger = PuppetHerald.logger
           nil
         end
       end
 
       set :environment, PuppetHerald.rackenv
       set :show_exceptions, false
-      configure :development do
-        register Sinatra::Reloader
-      end
 
       error do
         @bug = PuppetHerald.bug env['sinatra.error']

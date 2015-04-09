@@ -38,37 +38,43 @@ module PuppetHerald
     end
 
     def environment=(newenv)
-      rackenv = :production
       envsymbol = newenv.to_s.to_sym
-      case envsymbol
-      when :dev, :development
-        rackenv = :development
-        envsymbol = :development
-      when :test, :ci
-        rackenv = :test
-      else
-        rackenv = :production
-        envsymbol = :production
-      end
       ENV['PUPPET_HERALD_ENV'] = envsymbol.to_s
-      ENV['RACK_ENV'] = rackenv.to_s
+      rackenv
+      setup_logger
+    end
+
+    # Setups logger's level
+    #
+    # @return [nil]
+    def setup_logger
+      logger.level = self.in_dev? ? Logger::DEBUG : Logger::INFO
+      errlogger.level = logger.level
+      nil
     end
 
     # Gets the environment set for Herald
+    #
     # @return [Symbol] an environment
     def environment
-      env = :production
-      env = ENV['PUPPET_HERALD_ENV'].to_sym unless ENV['PUPPET_HERALD_ENV'].nil?
-      self.environment = env
-      env
+      ENV['PUPPET_HERALD_ENV'] = :production.to_s if ENV['PUPPET_HERALD_ENV'].nil?
+      ENV['PUPPET_HERALD_ENV'].to_sym
     end
 
     # Rack environment
     #
     # @return [Symbol] Rack environment
     def rackenv
-      environment
-      ENV['RACK_ENV'].to_sym
+      case environment
+      when :dev, :development
+        rackenv = :development
+      when :test, :ci
+        rackenv = :test
+      else
+        rackenv = :production
+      end
+      ENV['RACK_ENV'] = rackenv.to_s
+      rackenv
     end
 
     # Checks is running in DEVELOPMENT kind of environment (dev, ci, test)
@@ -106,4 +112,6 @@ module PuppetHerald
       bugo
     end
   end
+  PuppetHerald.rackenv
+  PuppetHerald.setup_logger
 end
