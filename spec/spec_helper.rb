@@ -25,7 +25,7 @@ begin
   gem 'coveralls'
   require 'coveralls'  
   if ENV['TRAVIS']
-    Coveralls.wear_merged!
+    Coveralls.wear!
   end
 rescue Gem::LoadError
   # do nothing

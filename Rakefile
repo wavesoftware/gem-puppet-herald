@@ -103,8 +103,8 @@ namespace :console do
 end
 
 tests = [
-  :'js:test',
   :'spec:all',
+  :'js:test',
   :rubocop
 ]
 
