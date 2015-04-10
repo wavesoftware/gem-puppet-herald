@@ -10,7 +10,7 @@ group :test do
   gem 'simplecov-lcov',     '~> 0.4.0',   require: false
   gem 'simplecov',          '~> 0.9.0',   require: false
   gem 'sqlite3',            '~> 1.3.0',   require: false
-  gem 'rubocop',            '~> 0.29.0',  require: false
+  gem 'rubocop',            '~> 0.30.0',  require: false
   gem 'rspec-activerecord', '~> 0.0.2',   require: false
   gem 'ox',                 '~> 2.1.0',   require: false
   gem 'jshintrb',           '~> 0.3.0',   require: false

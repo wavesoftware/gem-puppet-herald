@@ -27,14 +27,20 @@ module PuppetHerald
     # @return [Hash] a hash with uglified JS and source map
     def uglify(mapname)
       require 'uglifier'
-      sources = files.collect { |file| File.read("#{@base}/#{file}") }
+      filenames = files
+      sources = filenames.collect { |file| File.read("#{@base}/#{file}") }
       source = sources.join "\n"
-      uglifier = Uglifier.new(source_map_url: mapname)
-      uglified, source_map = uglifier.compile_with_map(source)
-      {
-        'js'     => uglified,
-        'js.map' => source_map
+      options = {
+        source_map_url:  mapname,
+        source_filename: filenames[0],
+        compress: {
+          angular:    true,
+          hoist_vars: true
+        }
       }
+      uglifier = Uglifier.new(options)
+      uglified, source_map = uglifier.compile_with_map(source)
+      { 'js' => uglified, 'js.map' => source_map }
     end
   end
 end

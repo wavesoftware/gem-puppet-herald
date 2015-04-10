@@ -22,7 +22,7 @@ module PuppetHerald
           minified = ''
           files = @js.files
         end
-        [minified, files, []]
+        [minified, files]
       end
       # Uglify an application JS's into one minified JS file
       # @param mapname [String] name of source map to be put into uglified JS
@@ -50,7 +50,7 @@ module PuppetHerald
         erb :app
       end
 
-      get(/\/app\.min\.(js\.map|js)/) do |ext|
+      get %r{^/app\.min\.(js\.map|js)$} do |ext|
         content_type 'application/javascript'
         contents = settings.logic.uglify('/app.min.js.map')[ext]
         cache_control :public, :must_revalidate, max_age: 60 if PuppetHerald.in_prod?
