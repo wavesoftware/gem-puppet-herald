@@ -19,7 +19,7 @@
       
       <h2><a href="#/"><img src="/img/shield97.svg" />Herald</a> <small>a Puppet report processor</small></h2>
 
-      <div ng-view></div>
+      <ui-view></ui-view>
       
       <address>
         <hr />
@@ -28,7 +28,8 @@
     </section>
 
     <script type="text/javascript" src="bower_components/angular/angular<%= @minified %>.js"></script>
-    <script type="text/javascript" src="bower_components/angular-route/angular-route<%= @minified %>.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router<%= @minified %>.js"></script>
+    <script type="text/javascript" src="bower_components/angular-breadcrumb/release/angular-breadcrumb<%= @minified %>.js"></script>
     <script type="text/javascript" src="bower_components/moment/min/moment.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-moment/angular-moment<%= @minified %>.js"></script>
     <script type="text/javascript" src="bower_components/angular-utils-pagination/dirPagination.js"></script>

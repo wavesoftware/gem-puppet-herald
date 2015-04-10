@@ -4,11 +4,11 @@ require 'model_helper'
 require 'rspec'
 require 'rack/test'
 
-shared_examples 'a redirect to app.html' do
+shared_examples 'a redirect to /' do
   it { expect(subject).not_to be_successful }
   it { expect(subject).to be_redirection }
   it { expect(subject.status).to eq(301) }
-  it { expect(subject.header['Location']).to eq('http://example.org/app.html') }
+  it { expect(subject.header['Location']).to eq('http://example.org/') }
 end
 
 shared_examples 'a proper 2xx - success' do
@@ -69,7 +69,7 @@ describe 'The Herald App' do
     PuppetHerald::Application
   end
 
-  describe "on '/' redirects to '/app.html'" do
+  describe "on '/app.html'" do
     level = nil
     before(:all) do
       require 'puppet-herald/app/configuration'
@@ -81,19 +81,19 @@ describe 'The Herald App' do
       app.quit!
       PuppetHerald.logger.level = level
     end
-    it_behaves_like 'a redirect to app.html' do
-      subject { get '/' }
+    it_behaves_like 'a redirect to /' do
+      subject { get '/app.html' }
     end
   end
 
-  describe "on '/index.html' redirects to '/app.html'" do
-    it_behaves_like 'a redirect to app.html' do
+  describe "on '/index.html'" do
+    it_behaves_like 'a redirect to /' do
       subject { get '/index.html' }
     end
   end
 
-  describe "on main page '/app.html'" do
-    subject { get '/app.html' }
+  describe "on main page '/'" do
+    subject { get '/' }
     context 'in production' do
       before { expect(PuppetHerald).to receive(:in_prod?).at_least(:once).and_return true }
       it { expect(subject.body).to include 'app.min.js' }
@@ -128,7 +128,7 @@ describe 'The Herald App' do
     it { expect(subject.content_type).to eq 'application/javascript;charset=utf-8' }
   end
 
-  describe "that is received a fatal error" do
+  describe "that had received a fatal error" do
     after :each do
       Dir.glob(Dir.tmpdir + '/puppet-herald-bug*.log') { |file| Pathname.new(file).unlink }
       PuppetHerald.environment = :test
@@ -155,7 +155,7 @@ describe 'The Herald App' do
       before :each do
         expect_any_instance_of(PuppetHerald::App::LogicImpl).to receive(:app_html).and_raise :expected
       end
-      subject { get '/app.html' }
+      subject { get '/' }
       context 'in production environment' do
         before { PuppetHerald.environment = :production }
         it_behaves_like '500 - error'

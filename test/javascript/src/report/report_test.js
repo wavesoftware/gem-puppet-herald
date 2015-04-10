@@ -31,7 +31,7 @@ describe('herald.report module', function() {
       // The $controller service is used to create instances of controllers
       var $controller = $injector.get('$controller');
 
-      var $routeParams = $injector.get('$routeParams');
+      var $stateParams = $injector.get('$stateParams');
 
       Page = $injector.get('Page');
 
@@ -39,7 +39,7 @@ describe('herald.report module', function() {
         if (id == null) { id = 1; }
         if (typeof(mockValues) === 'undefined') { mockValues = defaultMockValues; }
 
-        $routeParams.reportId = id;
+        $stateParams.reportId = id;
         // backend definition common for all tests
         var handler = $httpBackend.when('GET', '/api/v1/reports/' + id);
         if (mockValues != null) {

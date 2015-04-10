@@ -1,7 +1,7 @@
 'use strict';
 
-describe('herald.node module', function() {
-  beforeEach(module('herald.node'));
+describe('herald.pagination module', function() {
+  beforeEach(module('herald.pagination'));
 
   describe('PaginationFactory factory', function() {
     var PaginationFactory;
