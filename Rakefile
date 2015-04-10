@@ -5,6 +5,7 @@ require 'rubocop/rake_task'
 require 'rubocop'
 require 'fileutils'
 require 'rainbow'
+require 'inch/rake'
 
 def cobertura_attrs
   require 'ox'
@@ -97,19 +98,7 @@ namespace :console do
   end
 end
 
-tests = [
-  :'js:test',
-  :'spec:all',
-  :rubocop
-]
-
-begin
-  require 'inch/rake'
-  Inch::Rake::Suggest.new :inch, '--pedantic'
-  tests << :inch
-rescue LoadError # rubocop:disable all
-  # nothing here
-end
+Inch::Rake::Suggest.new :inch, '--pedantic'
 
 RuboCop::RakeTask.new(:rubocop) do |task|
   # don't abort rake on failure
@@ -140,7 +129,13 @@ task :coveralls do
   sh "./node_modules/.bin/lcov-result-merger 'coverage/*/lcov/lcov.info' | ./node_modules/coveralls/bin/coveralls.js"
 end
 
-tests << :inch if ENV['TRAVIS']
+tests = [
+  :'js:test',
+  :'spec:all',
+  :rubocop,
+  :inch
+]
+tests << :coveralls if ENV['TRAVIS']
 
 desc 'Run lint, and all spec tests.'
 task test: tests
