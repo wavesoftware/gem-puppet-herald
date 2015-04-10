@@ -31,12 +31,12 @@ module PuppetHerald
       sources = filenames.collect { |file| File.read("#{@base}/#{file}") }
       source = sources.join "\n"
       options = {
-        :source_map_url => mapname,
-        :compress       => {
-          :angular    => true,
-          :hoist_vars => true
-        },
-        :source_filename => filenames[0]
+        source_map_url:  mapname,
+        source_filename: filenames[0],
+        compress: {
+          angular:    true,
+          hoist_vars: true
+        }
       }
       uglifier = Uglifier.new(options)
       uglified, source_map = uglifier.compile_with_map(source)
