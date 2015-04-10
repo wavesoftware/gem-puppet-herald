@@ -1,3 +1,5 @@
+require 'sinatra/activerecord'
+
 # A module for Herald
 module PuppetHerald
   # module for models

@@ -101,3 +101,27 @@ describe PuppetHerald::Models::Report, '.with_log_entries', :rollback => true do
     end
   end
 end
+
+describe PuppetHerald::Models::Report, '.purge_older_then', :rollback => true do
+  let(:yaml1) { File.read(File.expand_path("../../fixtures/changed-notify.yaml", __FILE__)) }
+  let(:yaml2) { File.read(File.expand_path("../../fixtures/pending-notify.yaml", __FILE__)) }
+  let(:date) { DateTime.new(2015, 4, 8, 14, 20, 0, '+2') }
+  before(:each) do
+    PuppetHerald::Models::LogEntry.delete_all
+    PuppetHerald::Models::Report.delete_all
+    PuppetHerald::Models::Node.delete_all
+    PuppetHerald::Models::Report.create_from_yaml(yaml1)
+    PuppetHerald::Models::Report.create_from_yaml(yaml1)
+    PuppetHerald::Models::Report.create_from_yaml(yaml2)
+  end
+  subject { PuppetHerald::Models::Report.purge_older_then(date) }
+  context 'running on real sqlite3 db with date `2015-04-08 14:20:00+0200`' do
+    it 'return `2` as a number of a reports purged' do
+      expect(PuppetHerald::Models::Node.count).to eq(1)
+      expect(PuppetHerald::Models::Report.count).to eq(3)
+      expect(subject).to eq(2)
+      expect(PuppetHerald::Models::Report.count).to eq(1)
+      expect(PuppetHerald::Models::Node.count).to eq(1)
+    end
+  end
+end

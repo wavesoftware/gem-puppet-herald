@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'puppet-herald'
 require 'puppet-herald/cli'
 require 'sinatra/base'
+require 'sinatra/activerecord'
 
 class TestCLI < PuppetHerald::CLI
   def test_parse(argv)
@@ -14,9 +15,9 @@ context 'With silenced loggers' do
   let(:cli) { TestCLI.new }
 
   before :each do
-    cli.logger.level = 100
-    cli.errlogger.level = 100
-    PuppetHerald::database::logger.level = 100
+    PuppetHerald.environment = :test
+    PuppetHerald.logger.level = 100
+    PuppetHerald.errlogger.level = 100
     PuppetHerald::database::dbconn = nil
     allow(FileUtils).to receive(:touch)
   end
@@ -43,7 +44,6 @@ context 'With silenced loggers' do
     context 'on defaults' do
       let(:argv) { [] }
       before :each do
-        expect(PuppetHerald).to receive(:in_dev?).at_least(:once).and_return(false)
         expect(Kernel).to receive(:exit).with(0)
         expect(Sinatra::Application).to receive(:run!).and_return :none
         dbconn = { :adapter => 'sqlite3', :database => ':memory:' }

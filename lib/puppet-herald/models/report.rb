@@ -1,6 +1,7 @@
 require 'puppet-herald/models/log-entry'
 require 'puppet-herald/models/node'
 require 'puppet-herald/stubs/puppet'
+require 'sinatra/activerecord'
 
 # A module for Herald
 module PuppetHerald
@@ -24,15 +25,36 @@ module PuppetHerald
         # @return [Report] created report
         def create_from_yaml(yaml)
           parsed = parse_yaml yaml
-          report = Report.new
+          report = nil
+          transaction do
+            report = Report.new
 
-          parse_properties parsed, report
-          parse_logs parsed, report
-          node = parse_node parsed, report
+            parse_properties parsed, report
+            parse_logs parsed, report
+            node = parse_node parsed, report
 
-          report.save
-          node.save
+            report.save
+            node.save
+          end
           report
+        end
+
+        # Purges older reports then given date
+        #
+        # @param date [DateTime] a date that will be border to
+        # @return [Integer] number of
+        def purge_older_then(date)
+          deleted = 0
+          query = ['"reports"."time" < ?', date]
+          return 0 if where(query).count == 0
+          transaction do
+            idss = joins(:log_entries).where(query).collect(&:id).uniq
+            PuppetHerald::Models::LogEntry.where(['"report_id" IN (?)', idss]).delete_all unless idss.empty?
+            where(['"id" IN (?)', idss]).delete_all unless idss.empty?
+            PuppetHerald::Models::Node.delete_empty
+            deleted = idss.length
+          end
+          deleted
         end
 
         private

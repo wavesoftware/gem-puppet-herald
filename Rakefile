@@ -5,6 +5,7 @@ require 'rubocop/rake_task'
 require 'rubocop'
 require 'fileutils'
 require 'rainbow'
+require 'inch/rake'
 
 def cobertura_attrs
   require 'ox'
@@ -71,25 +72,33 @@ namespace :js do
     t.exclude_pattern = 'lib/puppet-herald/public/bower_components/**/*'
     t.options = :jshintrc
   end
+
   desc 'Install bower JS dependencies.'
   task bower: [:'js:install', :'js:bower_standalone']
   desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
   task test: [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
 end
 
-tests = [
-  :'js:test',
-  :'spec:all',
-  :rubocop
-]
-
-begin
-  require 'inch/rake'
-  Inch::Rake::Suggest.new :inch, '--pedantic'
-  tests << :inch
-rescue LoadError # rubocop:disable all
-  # nothing here
+namespace :console do
+  desc 'Start a console with loaded ActiveRecord models on dev database'
+  task :db do
+    require 'pry'
+    require 'puppet-herald'
+    PuppetHerald.environment = :dev
+    home = File.expand_path('~')
+    defaultdb     = "sqlite://#{home}/pherald.db"
+    defaultdbpass = "#{home}/.pherald.pass"
+    PuppetHerald.database.dbconn   = defaultdb
+    PuppetHerald.database.passfile = defaultdbpass
+    PuppetHerald.database.spec
+    require 'puppet-herald/app/configuration'
+    PuppetHerald::App::Configuration.configure_app(cron: false)
+    require 'puppet-herald/models/node'
+    pry
+  end
 end
+
+Inch::Rake::Suggest.new :inch, '--pedantic'
 
 RuboCop::RakeTask.new(:rubocop) do |task|
   # don't abort rake on failure
@@ -111,6 +120,22 @@ namespace :rubocop do
     end
   end
 end
+
+desc 'Combine and POST covarage result to coveralls.io'
+task :coveralls do
+  root = File.dirname(File.expand_path(__FILE__))
+  rlcov = File.read('./coverage/ruby/lcov/gem-puppet-herald.lcov').gsub("#{root}/", './')
+  File.write('./coverage/ruby/lcov/lcov.info', rlcov)
+  sh "./node_modules/.bin/lcov-result-merger 'coverage/*/lcov/lcov.info' | ./node_modules/coveralls/bin/coveralls.js"
+end
+
+tests = [
+  :'js:test',
+  :'spec:all',
+  :rubocop,
+  :inch
+]
+tests << :coveralls if ENV['TRAVIS']
 
 desc 'Run lint, and all spec tests.'
 task test: tests

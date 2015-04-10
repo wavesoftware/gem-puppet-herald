@@ -1,5 +1,6 @@
 require 'puppet-herald/models'
 require 'puppet-herald/models/report'
+require 'sinatra/activerecord'
 
 # A module for Herald
 module PuppetHerald
@@ -29,6 +30,15 @@ module PuppetHerald
       # @return [Integer] number of node's reports
       def no_of_reports
         PuppetHerald::Models::Report.where(node_id: id).count
+      end
+
+      # Deletes nodes that doesn't have reports
+      #
+      # @return [Integer] number of empty node deleted
+      def self.delete_empty
+        joinsql = 'LEFT JOIN "reports" ON "reports"."node_id" = "nodes"."id"'
+        wheresql = '"reports"."node_id" IS NULL'
+        joins(joinsql).where(wheresql).delete_all if joins(joinsql).where(wheresql).count > 0
       end
 
       # Gets a node with prefetched reports

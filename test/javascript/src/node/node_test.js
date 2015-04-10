@@ -83,5 +83,15 @@ describe('herald.node module', function() {
         expect(Page.actualTarget()).toBe(undefined);
       });
     });
+    describe('on page change', function() {
+      var ctrl;
+      beforeEach(function() {
+        ctrl = controller();
+      });
+      it('load a page from cache', function() {
+        ctrl.onPageChange(1);
+        expect(ctrl.node).toEqual(defaultMockValues);
+      });
+    });
   });
 });
