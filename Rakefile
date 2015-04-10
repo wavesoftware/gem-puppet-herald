@@ -71,16 +71,11 @@ namespace :js do
     t.exclude_pattern = 'lib/puppet-herald/public/bower_components/**/*'
     t.options = :jshintrc
   end
-  task :coveralls do
-    sh './node_modules/coveralls/bin/coveralls.js < ./coverage/javascript/lcov/lcov.info'
-  end
-  test_tasks = [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
-  test_tasks << :coveralls if ENV['TRAVIS']
 
   desc 'Install bower JS dependencies.'
   task bower: [:'js:install', :'js:bower_standalone']
   desc 'Run javascript Jasmine/Karma tests on PhantomJS.'
-  task test: test_tasks
+  task test: [:'js:install', :'js:bower', :'js:hint', :'js:test_standalone']
 end
 
 namespace :console do
@@ -103,8 +98,8 @@ namespace :console do
 end
 
 tests = [
-  :'spec:all',
   :'js:test',
+  :'spec:all',
   :rubocop
 ]
 
@@ -136,6 +131,16 @@ namespace :rubocop do
     end
   end
 end
+
+desc 'Combine and POST covarage result to coveralls.io'
+task :coveralls do
+  root = File.dirname(File.expand_path(__FILE__))
+  rlcov = File.read('./coverage/ruby/lcov/gem-puppet-herald.lcov').gsub("#{root}/", './')
+  File.write('./coverage/ruby/lcov/lcov.info', rlcov)
+  sh "./node_modules/.bin/lcov-result-merger 'coverage/*/lcov/lcov.info' | ./node_modules/coveralls/bin/coveralls.js"
+end
+
+tests << :inch if ENV['TRAVIS']
 
 desc 'Run lint, and all spec tests.'
 task test: tests

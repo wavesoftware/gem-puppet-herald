@@ -18,6 +18,7 @@
     "karma-ng-html2js-preprocessor": "~0.1",
     "karma-phantomjs-launcher": "~0.1",
     "karma-story-reporter": "~0.2",
+    "lcov-result-merger": "~1.0.0",
     "phantomjs": "~1.9.0",
     "wiredep": "~2.2.2"
   },

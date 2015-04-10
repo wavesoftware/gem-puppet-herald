@@ -7,7 +7,7 @@ group :test do
   gem 'rspec',              '~> 3.2.0',   require: false
   gem 'rspec-its',          '~> 1.2.0',   require: false
   gem 'webmock',            '~> 1.21.0',  require: false
-  gem 'coveralls',          '~> 0.8.0',   require: false
+  gem 'simplecov-lcov',     '~> 0.4.0',   require: false
   gem 'simplecov',          '~> 0.9.0',   require: false
   gem 'sqlite3',            '~> 1.3.0',   require: false
   gem 'rubocop',            '~> 0.29.0',  require: false
