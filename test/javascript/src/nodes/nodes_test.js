@@ -47,9 +47,9 @@ describe('herald.nodes module', function() {
         expect(controller().all[0].name).toBe('master.cl.vm');
       });
     });
-    it('should set Page.title to "All nodes"', function() {
+    it('should set Page.title to "All Puppet nodes"', function() {
       expect(controller()).not.toBe(undefined);
-      expect(Page.actualTitle()).toEqual('All nodes');
+      expect(Page.actualTitle()).toEqual('All Puppet nodes');
       expect(Page.actualTarget()).toBe(undefined);
     });
 

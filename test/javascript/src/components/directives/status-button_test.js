@@ -8,12 +8,12 @@ describe('herald.directives module', function() {
     beforeEach(module('herald.directives.status-button'));
 
     describe('StatusButtonController', function() {
-      var controller, scope, location;
+      var controller, scope, state;
       
       beforeEach(inject(function($injector) {
         var $controller = $injector.get('$controller');
         var $rootScope = $injector.get('$rootScope');
-        location = $injector.get('$location');
+        state = $injector.get('$state');
         $rootScope.$on('$locationChangeStart', function(event, args) {
           event.preventDefault();
         })
@@ -22,10 +22,10 @@ describe('herald.directives module', function() {
         controller = $controller('StatusButtonController', { $scope: $scope });
       }));
 
-      it('should navigate to "/node/112" after issuing navigate() function', function() {
-        spyOn(location, 'path').and.returnValue(null);
-        expect(scope.navigate('/node/:id', 112)).toBe(undefined);
-        expect(location.path).toHaveBeenCalledWith('/node/112');
+      it('should navigate to "/node-112" after issuing navigate() function', function() {
+        spyOn(state, 'go').and.returnValue(null);
+        expect(scope.navigate('nodes.node', 'nodeId', 112)).toBe(undefined);
+        expect(state.go).toHaveBeenCalledWith('nodes.node', { nodeId: 112 });
       });
 
     });
@@ -94,12 +94,12 @@ describe('herald.directives module', function() {
       });
     });
 
-    describe('ngStatusButton directive', function() {
+    describe('wsStatusButton directive', function() {
 
       var elm, scope, button;
       beforeEach(module('components/directives/status-button.html'));
       beforeEach(inject(function($rootScope, $compile){
-        var tpl = '<ng-status-button status="node.status" id="node.id" route="\'/node/:id\'"></ng-status-button>';
+        var tpl = '<ws-status-button status="node.status" id="node.id" route="\'/node/:id\'"></ws-status-button>';
         elm = angular.element(tpl);
         scope = $rootScope;
         $compile(elm)(scope);
@@ -147,8 +147,8 @@ describe('herald.directives module', function() {
         it('should embed a button with text " UNCHANGED"', function() {
           expect(button.text()).toEqual(' UNCHANGED');
         });
-        it('should embed a button with onclick == "navigate(route, id)"', function() {
-          expect(button.attr('ng-click')).toEqual("navigate(route, id)");
+        it('should embed a button with onclick == "navigate(route, idname, id)"', function() {
+          expect(button.attr('ng-click')).toEqual("navigate(route, idname, id)");
         });
 
       });

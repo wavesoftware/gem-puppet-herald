@@ -1,8 +1,8 @@
-<div ng-controller="NodeController as ctrl">
+<div ui-view>
 
 <div class="panel panel-primary">
   <!-- Default panel contents -->
-  <div class="panel-heading">Reports for 
+  <div class="panel-heading">All Puppet reports for node: 
     <samp>{{ ctrl.node.name }}</samp> <span class="badge">{{ ctrl.pagination.elements() }}</span>
   </div>
 
@@ -23,11 +23,12 @@
         total-items="ctrl.pagination.elements()">
         <td>{{ $index + 1 }}</td>
         <td>{{ report.configuration_version }}</td>
-        <td><ng-status-button 
+        <td><ws-status-button 
           status="report.status" 
           id="report.id"
-          route="'/report/:id'"
-          ></ng-status-button></td>
+          idname="'reportId'"
+          route="'report'"
+          ></ws-status-button></td>
         <td>{{ report.environment }}</td>
         <td am-time-ago="report.time"></td>
       </tr>

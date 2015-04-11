@@ -26,7 +26,7 @@ describe('herald.node module', function() {
       // The $controller service is used to create instances of controllers
       var $controller = $injector.get('$controller');
 
-      var $routeParams = $injector.get('$routeParams');
+      var $stateParams = $injector.get('$stateParams');
 
       Page = $injector.get('Page');
 
@@ -34,7 +34,7 @@ describe('herald.node module', function() {
         if (id == null) { id = 1; }
         if (typeof(mockValues) === 'undefined') { mockValues = defaultMockValues; }
 
-        $routeParams.nodeId = id;
+        $stateParams.nodeId = id;
         // backend definition common for all tests
         var handler = $httpBackend.when('GET', '/api/v1/nodes/' + id);
         if (mockValues != null) {
@@ -63,9 +63,9 @@ describe('herald.node module', function() {
         expect(ctrl.node.reports.length).toBe(2);
         expect(ctrl.node.no_of_reports).toBe(2);
       });
-      it('should set Page.title to "Node: master.cl.vm"', function() {
+      it('should set Page.title to "All reported jobs: master.cl.vm"', function() {
         expect(controller()).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('Node');
+        expect(Page.actualTitle()).toEqual('All reported jobs');
         expect(Page.actualTarget()).toBe('master.cl.vm');
       });
     });
@@ -77,9 +77,9 @@ describe('herald.node module', function() {
       it('there should not be node fetched', function() {
         expect(ctrl.node).toEqual(null);
       });
-      it('should set Page.title to "Node: "', function() {
+      it('should set Page.title to "All reported jobs: "', function() {
         expect(ctrl).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('Node');
+        expect(Page.actualTitle()).toEqual('All reported jobs');
         expect(Page.actualTarget()).toBe(undefined);
       });
     });

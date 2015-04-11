@@ -31,7 +31,7 @@ describe('herald.report module', function() {
       // The $controller service is used to create instances of controllers
       var $controller = $injector.get('$controller');
 
-      var $routeParams = $injector.get('$routeParams');
+      var $stateParams = $injector.get('$stateParams');
 
       Page = $injector.get('Page');
 
@@ -39,7 +39,7 @@ describe('herald.report module', function() {
         if (id == null) { id = 1; }
         if (typeof(mockValues) === 'undefined') { mockValues = defaultMockValues; }
 
-        $routeParams.reportId = id;
+        $stateParams.reportId = id;
         // backend definition common for all tests
         var handler = $httpBackend.when('GET', '/api/v1/reports/' + id);
         if (mockValues != null) {
@@ -70,9 +70,9 @@ describe('herald.report module', function() {
       it('should have fetch report with 4 lines', function() {
         expect(ctrl.report.log_entries.length).toBe(4);
       });
-      it('should set Page.title to "Report: 1234578"', function() {
+      it('should set Page.title to "Puppet report: 1234578"', function() {
         expect(ctrl).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('Report');
+        expect(Page.actualTitle()).toEqual('Puppet report');
         expect(Page.actualTarget()).toBe('1234578');
       });
     });
@@ -84,9 +84,9 @@ describe('herald.report module', function() {
       it('there should not be report fetched', function() {
         expect(ctrl.report).toEqual(null);
       });
-      it('should set Page.title to "Report: "', function() {
+      it('should set Page.title to "Puppet report: "', function() {
         expect(ctrl).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('Report');
+        expect(Page.actualTitle()).toEqual('Puppet report');
         expect(Page.actualTarget()).toBe(undefined);
       });
     });
