@@ -1,5 +1,43 @@
-<div>
+<div ui-view>
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">All Puppet nodes <span class="badge">{{ ctrl.pagination.elements() }}</span></div>
 
-  <ui-view></ui-view>
+  <!-- Table -->
+  <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Node</th>
+        <th>Status</th>
+        <th># of reports</th>
+        <th>Last run</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        dir-paginate="node in ctrl.all | itemsPerPage: ctrl.pagination.limit() | orderBy:'-last_run'"
+        total-items="ctrl.pagination.elements()"
+        >
+        <td>{{ $index + 1 }}</td>
+        <td><code>{{ node.name }}</code></td>
+        <td><ws-status-button
+          status="node.status"
+          id="node.id"
+          idname="'nodeId'"
+          route="'node'"></ws-status-button></td>
+        <td>{{ node.no_of_reports }}</td>
+        <td am-time-ago="node.last_run"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<nav class="text-center">
+  <dir-pagination-controls
+    on-page-change="ctrl.onPageChange(newPageNumber)"
+    boundary-links="true"
+    ></dir-pagination-controls>
+</nav>
 
 </div>

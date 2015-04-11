@@ -70,9 +70,9 @@ describe('herald.report module', function() {
       it('should have fetch report with 4 lines', function() {
         expect(ctrl.report.log_entries.length).toBe(4);
       });
-      it('should set Page.title to "Report: 1234578"', function() {
+      it('should set Page.title to "Puppet report: 1234578"', function() {
         expect(ctrl).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('Report');
+        expect(Page.actualTitle()).toEqual('Puppet report');
         expect(Page.actualTarget()).toBe('1234578');
       });
     });
@@ -84,9 +84,9 @@ describe('herald.report module', function() {
       it('there should not be report fetched', function() {
         expect(ctrl.report).toEqual(null);
       });
-      it('should set Page.title to "Report: "', function() {
+      it('should set Page.title to "Puppet report: "', function() {
         expect(ctrl).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('Report');
+        expect(Page.actualTitle()).toEqual('Puppet report');
         expect(Page.actualTarget()).toBe(undefined);
       });
     });

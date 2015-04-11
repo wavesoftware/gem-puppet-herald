@@ -15,17 +15,7 @@
   </head>
   <body>
 
-    <section class="container-fluid">
-      
-      <h2><a href="#/"><img src="/img/shield97.svg" />Herald</a> <small>a Puppet report processor</small></h2>
-
-      <ui-view></ui-view>
-      
-      <address>
-        <hr />
-        <p class="text-muted"><small>Herald v<span app-version></span></small></p>
-      </address>
-    </section>
+    <ui-view></ui-view>
 
     <script type="text/javascript" src="bower_components/angular/angular<%= @minified %>.js"></script>
     <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router<%= @minified %>.js"></script>
