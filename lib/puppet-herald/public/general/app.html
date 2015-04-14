@@ -1,6 +1,54 @@
 <section class="container-fluid">
   
   <h2><a href="#/"><img src="/img/shield97.svg" />Herald</a> <small>a Puppet report processor</small></h2>
+  <button
+    type="button"
+    class="btn btn-info pull-right glyphicon glyphicon-cog"
+    ng-init="optionsShown = false" ng-click="optionsShown = !optionsShown"></button>
+
+  <div class="modal fade" ng-class="{in: optionsShown, 'ws-show-block': optionsShown}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" ng-click="optionsShown = !optionsShown"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Herald settings</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form">
+          <div class="form-group">
+            <label for="settings_colorSyntax_selected">Reports color scheme</label>
+            <select id="settings_colorSyntax_selected"
+              class="form-control"
+              ng-model="settings.colorSyntax.selected"
+              ng-options="item.label for item in settings.colorSyntax.options track by item.value">
+            </select>
+          </div>
+          <!--
+          <div class="form-group">
+            <label for="settings_pagination_perPage">Elements per page</label>
+            <select id="settings_pagination_perPage"
+              class="form-control"
+              ng-model="settings.pagination.perPage">
+              <option>5</option>
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+              <option>30</option>
+              <option>50</option>
+              <option>100</option>
+            </select>
+          </div>
+          -->
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="settings.report.info"> Show more information in reports
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
   
   <div ncy-breadcrumb></div>
   <ui-view></ui-view>
