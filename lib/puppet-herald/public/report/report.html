@@ -1,25 +1,68 @@
-<div class="panel panel-primary">
+<div class="panel panel-info">
   <!-- Default panel contents -->
-  <div class="panel-heading">Report: 
-    <samp>{{ ctrl.report.configuration_version }}</samp>
-    <span class="badge">{{ ctrl.report.log_entries.length }}</span>
+  <div class="panel-heading">
+
+    <span class="">
+      Report: 
+      <samp>{{ ctrl.report.configuration_version }}</samp>
+      <span class="badge">{{ ctrl.report.log_entries.length }}</span>
+    </span>
+
+    <div class="btn-group">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+    Show more information: 
+    <div class="btn-group">
+      <button 
+        type="button"
+        class="btn btn-info btn-sm dropdown-toggle"
+        ng-init="dropdown = false"
+        ng-click="dropdown = !dropdown">
+        {{ settings.report.info ? 'yes' : 'no' }} <span class="caret"></span>
+      </button>
+      <ul 
+        class="dropdown-menu"
+        role="menu"
+        ng-click="event.preverntDefault();"
+        ng-class="{'ws-show-block': dropdown}">
+        <li><a href="" ng-click="settings.report.info = true; dropdown = !dropdown">yes</a></li>
+        <li><a href="" ng-click="settings.report.info = false; dropdown = !dropdown">no</a></li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Table -->
-  <table class="table table-condensed table-hover herald-table-report">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Line</th>
-      </tr>
-    </thead>
+  <table class="table table-hover" ng-show="settings.report.info">
     <tbody>
       <tr>
-        <td></td>
-        <td># puppet {{ ctrl.report.kind }} [...]</td>
+        <th>Host</th>
+        <td><samp>{{ ctrl.report.host }}</samp></td>
+        <th>Status</th>
+        <td><span class="label label-{{ ctrl.report.status | colorizeStatus }}">{{ ctrl.report.status }}</span></td>
+      </tr>
+      <tr>
+        <th>Date of report</th>
+        <td title="{{ ctrl.report.time }}">{{ ctrl.report.time | amCalendar }}</td>
+        <th>Configuration version</th>
+        <td><samp>{{ ctrl.report.configuration_version }}</samp></td>
+      </tr>
+      <tr>
+        <th>Environment</th>
+        <td>{{ ctrl.report.environment }}</td>
+        <th>Puppet version</th>
+        <td><samp>{{ ctrl.report.puppet_version }}</samp></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Table -->
+  <table
+    class="table table-condensed table-hover herald-table-report"
+    ng-class="{puppet3: settings.colorSyntax.selected.value == 'puppet3'}">
+    <tbody>
+      <tr>
+        <td class="unselectable"></td>
+        <td class="unselectable"># puppet {{ ctrl.report.kind }} [...]</td>
       </tr>
       <tr ng-repeat="entry in ctrl.report.log_entries | orderBy:'time'">
-        <td>{{ $index + 1 }}</td>
+        <td class="unselectable">{{ $index + 1 }}</td>
         <td class="herald-log-{{ entry.level }}">{{ entry.level | capitalize }}: {{ entry.source }}: {{ entry.message }}</td>
       </tr>
     </tbody>
