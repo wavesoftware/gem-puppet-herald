@@ -65,7 +65,7 @@ describe('herald.node module', function() {
       });
       it('should set Page.title to "All reported jobs: master.cl.vm"', function() {
         expect(controller()).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('All reported jobs');
+        expect(Page.actualTitle()).toEqual('Reports for');
         expect(Page.actualTarget()).toBe('master.cl.vm');
       });
     });
@@ -79,7 +79,7 @@ describe('herald.node module', function() {
       });
       it('should set Page.title to "All reported jobs: "', function() {
         expect(ctrl).not.toBe(undefined);
-        expect(Page.actualTitle()).toEqual('All reported jobs');
+        expect(Page.actualTitle()).toEqual('Reports');
         expect(Page.actualTarget()).toBe(undefined);
       });
     });

@@ -3,13 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Error 500 | Herald - a Puppet report processor</title>
+    <title>Herald</title>
+    <title>Error 500 | Herald</title>
     <meta name="description" content="Herald - a Puppet report processor">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap<%= @minified %>.css">
     <!-- Optional theme -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme<%= @minified %>.css">
+    <link rel="stylesheet" href="css/herald.css">
+    <link rel="icon" type="image/png" href="img/shield97.png"/>
   </head>
   <body>
 
@@ -18,10 +21,10 @@
       
       <div class="jumbotron">
         <h2 class="text-danger glyphicon glyphicon-fire">Internal Server Error (500)</h2>
-        <p>Something realy unpredictable just happend...</p>
+        <p>Something really unpredictable just happend...</p>
         <div class="well well-lg"><samp><%= @bug[:message] %></samp></div>
         <p><small><strong>Pro Tip!</strong> Please report this bug by passing contents of bug file: <code><%= @bug[:bugfile] %></code></small></p>
-        <p><a class="btn btn-danger btn-lg" href="<%= @bug[:homepage] %>" role="button">Report a bug</a></p>
+        <p><a class="btn btn-danger btn-lg" href="<%= @bug[:homepage] %>/issues/new" role="button">Report a bug</a></p>
       </div>
     </section>
   </body>

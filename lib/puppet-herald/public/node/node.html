@@ -1,9 +1,13 @@
 <div ui-view>
 
-<div class="panel panel-info">
+<div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading">All reports for: 
-    <samp>{{ ctrl.node.name }}</samp> <span class="badge">{{ ctrl.pagination.elements() }}</span>
+    <samp>{{ ctrl.node.name }}</samp> <span class="badge" ng-pluralize
+    count="ctrl.pagination.elements()"
+    when="{'0': 'no reports',
+      '1': '1 report',
+      'other': '{} reports'}"></span>
   </div>
 
   <!-- Table -->
@@ -22,7 +26,7 @@
         dir-paginate="report in ctrl.node.reports | itemsPerPage: ctrl.pagination.limit() | orderBy: '-time'"
         total-items="ctrl.pagination.elements()">
         <td>{{ $index + 1 }}</td>
-        <td>{{ report.configuration_version }}</td>
+        <td><samp>{{ report.configuration_version }}</samp></td>
         <td><ws-status-button 
           status="report.status" 
           id="report.id"
@@ -30,7 +34,7 @@
           route="'report'"
           ></ws-status-button></td>
         <td>{{ report.environment }}</td>
-        <td am-time-ago="report.time"></td>
+        <td title="{{ report.time }}">{{ report.time | amCalendar }}</td>
       </tr>
     </tbody>
   </table>

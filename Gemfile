@@ -24,7 +24,6 @@ group :development do
   gem 'guard-rake',       '~> 1.0.0',  require: false
   gem 'guard-shell',      '~> 0.7.0',  require: false
   gem 'guard-rubocop',    '~> 1.2.0',  require: false
-  gem 'travis',           '<= 1.6.11', require: false
   gem 'pry-byebug',       '~> 3.1.0',  require: false   if RUBY_VERSION > '2.0.0'
 end
 
