@@ -1,11 +1,15 @@
-<div class="panel panel-info">
+<div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading">
 
     <span class="">
       Report: 
       <samp>{{ ctrl.report.configuration_version }}</samp>
-      <span class="badge">{{ ctrl.report.log_entries.length }}</span>
+      <span class="badge" ng-pluralize
+    count="ctrl.report.log_entries.length"
+    when="{'0': 'no output',
+      '1': '1 line',
+      'other': '{} lines'}"></span>
     </span>
 
     <div class="btn-group">&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -13,18 +17,18 @@
     <div class="btn-group">
       <button 
         type="button"
-        class="btn btn-info btn-sm dropdown-toggle"
+        class="btn btn-default btn-sm dropdown-toggle"
         ng-init="dropdown = false"
         ng-click="dropdown = !dropdown">
-        {{ settings.report.info ? 'yes' : 'no' }} <span class="caret"></span>
+        {{ settings.report.info ? 'Yes' : 'No' }} <span class="caret"></span>
       </button>
       <ul 
         class="dropdown-menu"
         role="menu"
         ng-click="event.preverntDefault();"
         ng-class="{'ws-show-block': dropdown}">
-        <li><a href="" ng-click="settings.report.info = true; dropdown = !dropdown">yes</a></li>
-        <li><a href="" ng-click="settings.report.info = false; dropdown = !dropdown">no</a></li>
+        <li><a href="" ng-click="settings.report.info = true; dropdown = !dropdown">Yes</a></li>
+        <li><a href="" ng-click="settings.report.info = false; dropdown = !dropdown">No</a></li>
       </ul>
     </div>
   </div>
@@ -35,7 +39,7 @@
         <th>Host</th>
         <td><samp>{{ ctrl.report.host }}</samp></td>
         <th>Status</th>
-        <td><span class="label label-{{ ctrl.report.status | colorizeStatus }}">{{ ctrl.report.status }}</span></td>
+        <td><span class="label label-{{ ctrl.report.status | colorizeStatus }}">{{ ctrl.report.status | uppercase }}</span></td>
       </tr>
       <tr>
         <th>Date of report</th>
