@@ -197,7 +197,7 @@ npm install
 And then test Javascript code with:
 
 ```shell
-bundle exec rake js
+bundle exec rake js:test
 ```
 
 Check your code for quality with:
