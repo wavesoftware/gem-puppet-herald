@@ -1,28 +1,26 @@
 {
   "name": "puppet-herald",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Provides a gateway for consuming puppet reports, a REST API and a simple Web app to display reports.",
   "main": "lib/puppet-herald/public/app.js",
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "angular": "1.3.x",
-    "angular-route": "1.3.x",
-    "moment": "~2.8",
-    "angular-moment": "~0.8"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "angular-loader": "1.3.x",
-    "angular-mocks": "1.3.x",
-    "jasmine-core": "~2.1.0",
-    "karma-jasmine": "~0.3.0",
+    "bower": "~1.4.0",
+    "coveralls": "~2.11.0",
+    "globby": "~2.0.0",
+    "jasmine-core": "~2.2.0",
     "karma": "~0.12.0",
-    "phantomjs": "~1.9.0",
-    "karma-story-reporter": "~0.2",
-    "karma-coverage": "~0.1",
+    "karma-coverage": "~0.2",
+    "karma-jasmine": "~0.3.0",
+    "karma-ng-html2js-preprocessor": "~0.1",
     "karma-phantomjs-launcher": "~0.1",
-    "karma-ng-html2js-preprocessor": "~0.1"
+    "karma-story-reporter": "~0.3",
+    "lcov-result-merger": "~1.0.0",
+    "phantomjs": "~1.9.0",
+    "wiredep": "~2.2.2"
   },
   "scripts": {
     "test": "test/javascript/karma.conf.js"
@@ -37,7 +35,7 @@
     "herald"
   ],
   "author": "Krzysztof Suszynski",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/wavesoftware/gem-puppet-herald/issues"
   },

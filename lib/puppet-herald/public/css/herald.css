@@ -1,8 +1,97 @@
+body {
+  background-color: #d8dee0;
+}
+
+code, kbd, pre, samp {
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+}
+
 .herald-table-report > tbody > tr {
-  font-family: monospace;
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
   background-color: #2C001E;
-  white-space: pre;
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
   color: #777;
+  overflow: scroll;
+}
+
+.unselectable {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+.header {
+  padding: 0.5em;
+  margin: 0 -15px 1em -15px;
+  background-color: #444;
+  overflow: hidden;
+}
+
+.header .header-logo {
+  white-space: nowrap;
+  float: left;
+  margin-right: 0.5em;
+}
+.header .header-breadcrumb {
+  margin: 0;
+  overflow: hidden;
+}
+.header .header-settings {
+  width: 2.93em;
+  float: right;
+  margin-left: 1em;
+}
+.header .header-logo h1, .header .header-logo h2, .header .header-logo h3 {
+  width: 4em;
+  margin: 0;
+  font-weight: 100;
+}
+.header .header-logo a {
+  color: #eee;
+}
+.header .header-logo img {
+  height: 1em;
+  vertical-align: top;
+  padding: 0 0.1em;
+}
+.header .header-breadcrumb .breadcrumb {
+  margin-bottom: 0;
+  background: transparent;
+}
+.header .header-breadcrumb .breadcrumb a {
+  color: #eee;
+}
+.header .header-breadcrumb .breadcrumb > .active {
+  color: #aaa;
+}
+
+.pagination {
+  margin: 0;
+}
+
+.footer {
+  margin-top: -1em;
+}
+
+.modal {
+  background-color: rgba(0,0,0,0.3);
+}
+
+.ws-show-block {
+  display: block;
 }
 
 .table-hover.herald-table-report > tbody > tr:hover {
@@ -18,10 +107,18 @@
 }
 
 .herald-table-report > tbody > tr > td.herald-log-notice {
-  color: #eeeeec;
+  color: #079898;
 }
 
 .herald-table-report > tbody > tr > td.herald-log-debug {
+  color: #eeeeec;
+}
+
+.puppet3.herald-table-report > tbody > tr > td.herald-log-notice {
+  color: #eeeeec;
+}
+
+.puppet3.herald-table-report > tbody > tr > td.herald-log-debug {
   color: #079898;
 }
 

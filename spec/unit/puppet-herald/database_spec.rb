@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'puppet-herald'
 
 describe PuppetHerald::Database, '.spec' do
+  before(:each) do
+    PuppetHerald.environment = :test
+    PuppetHerald.logger.level = 100
+    PuppetHerald.errlogger.level = 100
+  end
   let(:tempdir) { Dir.tmpdir }
   let(:echo) { false }
   subject { PuppetHerald::database::spec echo }
@@ -26,9 +31,6 @@ describe PuppetHerald::Database, '.spec' do
       its(:size) { should eq 2 }
       context 'while echoing!!' do
         let(:echo) { true }
-        before :each do
-          PuppetHerald::database::logger.level = Logger::FATAL
-        end
         its(:class) { should be Hash }
         its(:size) { should eq 2 }
       end

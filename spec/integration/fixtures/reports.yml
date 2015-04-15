@@ -1,0 +1,61 @@
+---
+
+master_r1:
+ id: 1
+ status: 'changed'
+ environment: 'production'
+ transaction_uuid: '4dda18fb-c4cf-412a-94f6-43d9420e9582'
+ configuration_version: '12345678'
+ puppet_version: '3.7.3'
+ kind: 'apply'
+ host: 'master.vm'
+ time: '2014-12-17T15:34:08'
+ node_id: 1
+
+master_r2:
+ id: 2
+ status: 'failed'
+ environment: 'production'
+ transaction_uuid: '1d9a613b-a8b1-44d4-87fa-ab8143c8d403'
+ configuration_version: '12345698'
+ puppet_version: '3.7.3'
+ kind: 'apply'
+ host: 'master.vm'
+ time: '2014-12-17T16:04:08'
+ node_id: 1
+
+master_r3:
+ id: 3
+ status: 'unchanged'
+ environment: 'production'
+ transaction_uuid: 'd28a1795-cc74-42b3-ab9d-88df5fff14cc'
+ configuration_version: '12345712'
+ puppet_version: '3.7.3'
+ kind: 'apply'
+ host: 'master.vm'
+ time: '2014-12-17T16:34:08'
+ node_id: 1
+
+master_r4:
+ id: 4
+ status: 'unchanged'
+ environment: 'production'
+ transaction_uuid: 'e33516ae-1b28-40b5-89da-615cd73cf324'
+ configuration_version: '12345721'
+ puppet_version: '3.7.3'
+ kind: 'apply'
+ host: 'master.vm'
+ time: '2014-12-17T17:04:08'
+ node_id: 1
+
+master_r5:
+ id: 5
+ status: 'changed'
+ environment: 'production'
+ transaction_uuid: '7b639655-ba23-4e2c-b81b-80c7dbefd157'
+ configuration_version: '12345756'
+ puppet_version: '3.7.3'
+ kind: 'apply'
+ host: 'master.vm'
+ time: '2014-12-17T17:34:08'
+ node_id: 1

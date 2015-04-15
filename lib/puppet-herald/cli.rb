@@ -1,5 +1,4 @@
 require 'micro-optparse'
-require 'logger'
 require 'puppet-herald'
 require 'puppet-herald/version'
 require 'puppet-herald/database'
@@ -11,21 +10,15 @@ module PuppetHerald
     # Initialize CLI
     # @return [CLI] an CLI object
     def initialize
-      @logger = Logger.new STDOUT
-      @errlogger = Logger.new STDERR
       self
     end
-
-    # Logger for CLI interface (error and std)
-    # @return [Logger] logger for CLI
-    attr_reader :logger, :errlogger
 
     # Executes an Herald app from CLI
     #
     # @param argv [Array] an argv from CLI
     # @return [Integer] a status code for program
     def run!(argv = ARGV)
-      PuppetHerald.environment
+      PuppetHerald.rackenv
 
       options = parse_or_kill argv, 2
       run_or_kill options, 1
@@ -40,7 +33,8 @@ module PuppetHerald
     def parse(argv)
       options = parser.process!(argv)
 
-      logger.info "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} in #{PuppetHerald.environment}..."
+      msg = "Starting #{PuppetHerald::NAME} v#{PuppetHerald::VERSION} in #{PuppetHerald.rackenv}..."
+      PuppetHerald.logger.info msg
       PuppetHerald.database.dbconn   = options[:dbconn]
       PuppetHerald.database.passfile = options[:passfile]
       PuppetHerald.database.spec(true)
@@ -54,14 +48,14 @@ module PuppetHerald
       PuppetHerald::Application.run! options
     rescue StandardError => ex
       bug = PuppetHerald.bug(ex)
-      errlogger.fatal "Unexpected error occured, mayby a bug?\n\n#{bug[:message]}\n\n#{bug[:help]}"
+      PuppetHerald.errlogger.fatal "Unexpected error occured, mayby a bug?\n\n#{bug[:message]}\n\n#{bug[:help]}"
       Kernel.exit retcode
     end
 
     def parse_or_kill(argv, retcode)
       return parse argv
     rescue StandardError => ex
-      errlogger.fatal "Database configuration is invalid!\n\n#{ex.message}"
+      PuppetHerald.errlogger.fatal "Database configuration is invalid!\n\n#{ex.message}"
       Kernel.exit retcode
     end
 

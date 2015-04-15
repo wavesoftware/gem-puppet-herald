@@ -3,6 +3,12 @@ require 'rspec/its'
 begin
   gem 'simplecov'
   require 'simplecov'
+  require 'simplecov-lcov'
+  SimpleCov::Formatter::LcovFormatter.report_with_single_file = true
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::LcovFormatter,
+  ]
   SimpleCov.start do
     add_filter '/test/'
     add_filter '/spec/'
@@ -16,16 +22,6 @@ begin
     minimum_coverage 95
     maximum_coverage_drop 3
     coverage_dir 'coverage/ruby'
-  end
-rescue Gem::LoadError
-  # do nothing
-end
-
-begin
-  gem 'coveralls'
-  require 'coveralls'  
-  if ENV['TRAVIS']
-    Coveralls.wear!
   end
 rescue Gem::LoadError
   # do nothing

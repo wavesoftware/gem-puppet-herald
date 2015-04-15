@@ -3,5 +3,8 @@ gem 'pg'
 gem 'puma'
 # gem 'thin'
 
+# Until released without support for 1.8
+gem 'travis', '<= 1.6.11', require: false
+
 
 # vim:ft=ruby

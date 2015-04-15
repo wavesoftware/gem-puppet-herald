@@ -37,20 +37,20 @@ module PuppetHerald
       set :logic, PuppetHerald::App::LogicImpl.new
 
       get '/' do
-        redirect '/app.html', 301
-      end
-
-      get '/index.html' do
-        redirect '/app.html', 301
-      end
-
-      get '/app.html' do
         cache_control :public, :must_revalidate, max_age: 60 if PuppetHerald.in_prod?
         @minified, @files = settings.logic.app_html
         erb :app
       end
 
-      get(/\/app\.min\.(js\.map|js)/) do |ext|
+      get '/index.html' do
+        redirect '/', 301
+      end
+
+      get '/app.html' do
+        redirect '/', 301
+      end
+
+      get %r{^/app\.min\.(js\.map|js)$} do |ext|
         content_type 'application/javascript'
         contents = settings.logic.uglify('/app.min.js.map')[ext]
         cache_control :public, :must_revalidate, max_age: 60 if PuppetHerald.in_prod?

@@ -19,8 +19,16 @@ module PuppetHerald
       # @param block [block] an extra configuration block
       # @return [Sinatra::Application] an Herald application
       def run!(options = {}, &block)
-        PuppetHerald::App::Configuration.dbmigrate!
+        PuppetHerald::App::Configuration.configure_app
         super options, *block
+      end
+
+      # Deconfigure application
+      #
+      # @return [nil]
+      def quit!
+        PuppetHerald::App::Configuration.deconfigure_app
+        super
       end
     end
   end

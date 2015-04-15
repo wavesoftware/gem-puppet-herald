@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'logger'
 
 # A module for Herald
 module PuppetHerald
@@ -8,12 +7,7 @@ module PuppetHerald
     def initialize
       @dbconn   = nil
       @passfile = nil
-      @logger = Logger.new STDOUT
     end
-
-    # Gets a logger for database
-    # @return [Logger] a logger
-    attr_reader :logger
 
     # Sets a database connection
     # @return [String] a dbconnection string
@@ -57,7 +51,7 @@ module PuppetHerald
       return unless log
       copy = connection.dup
       copy[:password] = '***' unless copy[:password].nil?
-      logger.info "Using #{copy.inspect} for database."
+      PuppetHerald.logger.info "Using #{copy.inspect} for database."
     end
 
     def sqlite(match)
