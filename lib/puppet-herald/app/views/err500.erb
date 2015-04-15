@@ -21,10 +21,10 @@
       
       <div class="jumbotron">
         <h2 class="text-danger glyphicon glyphicon-fire">Internal Server Error (500)</h2>
-        <p>Something realy unpredictable just happend...</p>
+        <p>Something really unpredictable just happend...</p>
         <div class="well well-lg"><samp><%= @bug[:message] %></samp></div>
         <p><small><strong>Pro Tip!</strong> Please report this bug by passing contents of bug file: <code><%= @bug[:bugfile] %></code></small></p>
-        <p><a class="btn btn-danger btn-lg" href="<%= @bug[:homepage] %>" role="button">Report a bug</a></p>
+        <p><a class="btn btn-danger btn-lg" href="<%= @bug[:homepage] %>/issues/new" role="button">Report a bug</a></p>
       </div>
     </section>
   </body>
