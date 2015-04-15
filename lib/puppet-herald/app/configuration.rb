@@ -86,9 +86,9 @@ module PuppetHerald
       end
 
       set :environment, PuppetHerald.rackenv
-      set :show_exceptions, :after_handler
+      set :show_exceptions, false
 
-      error 400..510 do
+      error do
         @bug = PuppetHerald.bug env['sinatra.error']
         if PuppetHerald::App::Configuration.api? request
           content_type 'application/json'
