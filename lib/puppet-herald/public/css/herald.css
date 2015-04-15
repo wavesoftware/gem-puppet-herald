@@ -2,8 +2,12 @@ body {
   background-color: #d8dee0;
 }
 
+code, kbd, pre, samp {
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+}
+
 .herald-table-report > tbody > tr {
-  font-family: 'Source Code Pro', monospace;
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
   background-color: #2C001E;
   white-space: pre-wrap;       /* css-3 */
   white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
@@ -72,6 +76,14 @@ body {
 }
 .header .header-breadcrumb .breadcrumb > .active {
   color: #aaa;
+}
+
+.pagination {
+  margin: 0;
+}
+
+.footer {
+  margin-top: -1em;
 }
 
 .modal {
