@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'uri'
 
 # A module for Herald
 module PuppetHerald
