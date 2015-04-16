@@ -28,7 +28,7 @@ module PuppetHerald
     def uglify(mapname)
       require 'uglifier'
       filenames = files
-      sources = filenames.collect { |file| File.read("#{@base}/#{file}") }
+      sources = filenames.collect { |file| File.read(PuppetHerald.relative_dir("#{@base}/#{file}")) }
       source = sources.join "\n"
       options = {
         source_map_url:  mapname,
