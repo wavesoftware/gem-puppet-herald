@@ -10,7 +10,8 @@ module PuppetHerald
         require 'uglifier'
         @supports = true
       rescue ::StandardError => ex
-        PuppetHerald.errlogger.warn("Cant find Javascript engine. Ugifing of JS app is disabled!!! Please install one of Javascript engines for ex.: gem install therubyracer (consult README.md file) - #{ex.message}")
+        PuppetHerald.errlogger.warn("Cant find Javascript engine. Ugifing of JS app is disabled!!! Please " +
+        "install one of Javascript engines for ex.: gem install therubyracer (consult README.md file) - #{ex.message}")
         @supports = false
       end
     end
