@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+group :development do
+  gem 'tins', '~> 1.6.0',  require: false
+end
+
+# vim:ft=ruby

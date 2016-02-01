@@ -29,6 +29,7 @@ end
 
 local_gemfile = File.join(File.dirname(__FILE__), 'Gemfile.local')
 eval_gemfile local_gemfile if File.exist?(local_gemfile)
+eval_gemfile './Gemfile.ruby19' if RUBY_VERSION < '2.0.0'
 
 begin
   npmbin = `npm bin`.strip
