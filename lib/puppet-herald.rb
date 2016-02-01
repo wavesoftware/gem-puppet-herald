@@ -6,6 +6,7 @@ end
 
 require 'puppet-herald/database'
 require 'logger'
+require 'logger/colors'
 
 # A module for Herald
 module PuppetHerald
