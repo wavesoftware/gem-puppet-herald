@@ -8,7 +8,7 @@ puppet-herald gem
 [![Build Status](https://img.shields.io/travis/wavesoftware/gem-puppet-herald/master.svg)](https://travis-ci.org/wavesoftware/gem-puppet-herald) [![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald) [![Coverage Status](https://img.shields.io/coveralls/wavesoftware/gem-puppet-herald/master.svg)](https://coveralls.io/r/wavesoftware/gem-puppet-herald?branch=master) [![Code Climate](https://codeclimate.com/github/wavesoftware/gem-puppet-herald/badges/gpa.svg?branch=master)](https://codeclimate.com/github/wavesoftware/gem-puppet-herald) [![Inline docs](http://inch-ci.org/github/wavesoftware/gem-puppet-herald.svg?branch=master)](http://inch-ci.org/github/wavesoftware/gem-puppet-herald)
 
 ##### Development branch
-[![Build Status](https://img.shields.io/travis/wavesoftware/gem-puppet-herald/develop.svg)](https://travis-ci.org/wavesoftware/gem-puppet-herald) [![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald) [![Coverage Status](https://img.shields.io/coveralls/wavesoftware/gem-puppet-herald/develop.svg)](https://coveralls.io/r/wavesoftware/gem-puppet-herald?branch=develop) [![Code Climate](https://codeclimate.com/github/wavesoftware/gem-puppet-herald/badges/gpa.svg?branch=develop)](https://codeclimate.com/github/wavesoftware/gem-puppet-herald) [![Inline docs](http://inch-ci.org/github/wavesoftware/gem-puppet-herald.svg?branch=develop)](http://inch-ci.org/github/wavesoftware/gem-puppet-herald) 
+[![Build Status](https://img.shields.io/travis/wavesoftware/gem-puppet-herald/develop.svg)](https://travis-ci.org/wavesoftware/gem-puppet-herald) [![Dependency Status](https://gemnasium.com/wavesoftware/gem-puppet-herald.svg)](https://gemnasium.com/wavesoftware/gem-puppet-herald) [![Coverage Status](https://img.shields.io/coveralls/wavesoftware/gem-puppet-herald/develop.svg)](https://coveralls.io/r/wavesoftware/gem-puppet-herald?branch=develop) [![Code Climate](https://codeclimate.com/github/wavesoftware/gem-puppet-herald/badges/gpa.svg?branch=develop)](https://codeclimate.com/github/wavesoftware/gem-puppet-herald) [![Inline docs](http://inch-ci.org/github/wavesoftware/gem-puppet-herald.svg?branch=develop)](http://inch-ci.org/github/wavesoftware/gem-puppet-herald)
 
 Overview
 --------
@@ -19,18 +19,42 @@ Herald is a puppet report processor. He provides a gateway for consuming puppet 
 
 ![A logs of single report](https://raw.githubusercontent.com/wavesoftware/gem-puppet-herald/gh-pages/images/logs.png)
 
-Puppet module
+Docker container
 -----
 
-There is/will be a puppet module that handle installation and configuration of Herald and prerequisites. Installing configuring and running with puppet is recommended. If you decided to take that approch check out: https://github.com/wavesoftware/puppet-herald
+Installation and usage could be pretty much simplified when you decide to use a Docker container for this application. Docker container is maintained by guys at COI.gov.pl here: https://hub.docker.com/r/coigovpl/herald For more details go to theirs page. Simple usages are pasted below:
+
+#### Run with PostgreSQL docker container
+
+If you like to run Herald with private docker container execute commands below:
+
+```
+docker run -d --name=postgres postgres
+docker run -d --link postgres -p 11303:11303 --name=herald coigovpl/herald
+```
+
+#### Run with remote PostgreSQL
+
+If you like to run Herald with external postgres set appropriate configuration options with environment variables `HERALD_*` similar to:
+
+```
+docker run -d \
+  -e HERALD_POSTGRES_HOST=herald-db.localdomain \
+  -p 11303:11303 \
+  --name=herald coigovpl/herald
+```
+
+Puppet module (not yet functional)
+-----
+
+There is/will be a puppet module that handle installation and configuration of Herald and prerequisites. Installing configuring and running with puppet is recommended. If you decided to take that approach check out: https://github.com/wavesoftware/puppet-herald (not yet available)
 
 Installation, configuration and usage point seen below does not apply to installing with puppet!
-
 
 Installation
 -----
 
-Herald typically should be installed on the same node or in management network of your puppet master. It will listen by default to localhost (this can be changed by `--bind` option). You should take care to properlly secure Herald if its publicly avialable (SSL, Authorization, Access List, Firewalls etc.). This could be easily done with Apache web server. Is approch is taken in puppet module (see above).
+Herald typically should be installed on the same node or in management network of your puppet master. It will listen by default to localhost (this can be changed by `--bind` option). You should take care to properly secure Herald if its publicly available (SSL, Authorization, Access List, Firewalls etc.). This could be easily done with Apache web server. This approach is taken in puppet module (see above).
 
 If you decided to install Herald by yourself, issue just:
 
@@ -104,7 +128,7 @@ puppet-herald \
 Configuring puppet master
 -------------------------
 
-To send reports to Herald, you need to configure your puppet master to use custom report proccessor. This processor is also automatically configured if you choose to use a puppet module installation version. If not you must configure it by yourself.
+To send reports to Herald, you need to configure your puppet master to use custom report processor. This processor is also automatically configured if you choose to use a puppet module installation version. If not you must configure it by yourself.
 
 First install a puppet-herald gem if you didn't do it already on puppet master:
 
@@ -118,7 +142,7 @@ If you are running PE, run instead:
 sudo /opt/puppet/bin/gem install puppet-herald
 ```
 
-Then create a file in your puppet module directory (you can get modulepath with command: `puppet config print modulepath`). For example: `<puppet modules>/herald/lib/puppet/reports/herald.rb` with contents:
+Then create a file in your puppet module directory (you can get module path with command: `puppet config print modulepath`). For example: `<puppet modules>/herald/lib/puppet/reports/herald.rb` with contents:
 
 ```ruby
 require 'puppet'
@@ -141,7 +165,8 @@ require 'puppet-herald/client'
 Puppet::Reports.register_report(:herald) do
   desc "Process reports via the Herald API."
   def process
-    PuppetHerald::Client.new('master.secure.vm', 8082).process(self)
+    # Posts a reports to master.secure.vm:11303
+    PuppetHerald::Client.new('master.secure.vm', 11303).process(self)
   end
 end
 ```
@@ -214,9 +239,9 @@ Contributions are welcome!
 To contribute, follow the standard [git flow](http://danielkummer.github.io/git-flow-cheatsheet/) of:
 
 1. Fork it
-1. Create your feature branch (`git checkout -b feature/my-new-feature`)
+1. Create your feature or bugfix branch (`git checkout -b feature/my-new-feature`)
 1. Commit your changes (`git commit -am 'Add some feature'`)
-1. Push to the branch (`git push origin feature/my-new-feature`)
+1. Push to the origin (`git push origin feature/my-new-feature`)
 1. Create new Pull Request
 
 Even if you can't contribute code, if you have an idea for an improvement please open an [issue](https://github.com/wavesoftware/gem-puppet-herald/issues).
