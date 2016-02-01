@@ -15,7 +15,7 @@ module PuppetHerald
       # Gets an app.html
       # @dodgy executed also to raise an exception for testing (application_spec)
       def app_html
-        if PuppetHerald.in_prod?
+        if PuppetHerald.in_prod? and @js.supports?
           minified = '.min'
           files = ['/app.min.js']
         else

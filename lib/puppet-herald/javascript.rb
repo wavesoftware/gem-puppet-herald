@@ -6,6 +6,19 @@ module PuppetHerald
     def initialize
       @files = nil
       @base = 'lib/puppet-herald/public'
+      begin
+        require 'uglifier'
+        @supports = true
+      rescue ::StandardError => ex
+        PuppetHerald.errlogger.warn("Cant find Javascript engine. Ugifing of JS app is disabled!!! Please install one of Javascript engines for ex.: gem install therubyracer (consult README.md file) - #{ex.message}")
+        @supports = false
+      end
+    end
+
+    # Checks if app properly supports uglifing JS
+    # @return [Boolean] true, if supports
+    def supports?
+      @supports
     end
 
     # Returns a list of JS files to be inserted into main HTML
@@ -26,7 +39,6 @@ module PuppetHerald
     # @param mapname [String] name of source map to be put into uglified JS
     # @return [Hash] a hash with uglified JS and source map
     def uglify(mapname)
-      require 'uglifier'
       filenames = files
       sources = filenames.collect { |file| File.read(PuppetHerald.relative_dir("#{@base}/#{file}")) }
       source = sources.join "\n"
