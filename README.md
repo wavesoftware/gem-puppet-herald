@@ -62,6 +62,27 @@ If you decided to install Herald by yourself, issue just:
 sudo gem install puppet-herald
 ```
 
+###Prerequisites for Herald
+
+To use Herald you should have some Javascript engine installed. This is due to fact that Herald uses a [`uglifier` gem](https://rubygems.org/gems/uglifier) that uses a `execjs` gem and this means you should provide one of supported JS engines:
+
+* [therubyracer](https://github.com/cowboyd/therubyracer) - Google V8
+  embedded within Ruby
+* [therubyrhino](https://github.com/cowboyd/therubyrhino) - Mozilla
+  Rhino embedded within JRuby
+* [Duktape.rb](https://github.com/judofyr/duktape.rb) - Duktape JavaScript interpreter
+* [Node.js](http://nodejs.org/)
+* Apple JavaScriptCore - Included with Mac OS X
+* [Microsoft Windows Script Host](http://msdn.microsoft.com/en-us/library/9bbdkx3k.aspx) (JScript)
+* [Google V8](http://code.google.com/p/v8/)
+
+Basically if you have NodeJS installed that means you should be fine. Other wise just install embedded V8 engine like this:
+
+```shell
+sudo apt-get install make gcc g++ ruby-dev
+sudo gem install therubyracer
+```
+
 Configuration
 -----
 
